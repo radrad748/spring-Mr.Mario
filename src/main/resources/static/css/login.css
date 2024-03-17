@@ -1,0 +1,44 @@
+
+.div-front {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    width: 80%;
+}
+.img-mario {
+    width: 400px;
+    height: auto;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-left: 37%;
+}
+.div-welcome {
+    height: 10%;
+    width: 80%;
+    padding-left: 35%;
+}
+.div-sub-welcome {
+    height: 20%;
+    width: 30%;
+    margin-left: 36%;
+    margin-top: 2%;
+}
+.mr {
+    font-size: 2.0em;
+    font-weight: bold;
+    font-style: italic;
+    color: #7a6060;
+}
+.p-mr {
+    font-size: 1.7em;
+    color: #7a6060;
+}
+.p-mr2 {
+    color: #7a6060;
+    text-align: center;
+}
+.log {
+    margin-left: 20%;
+}
