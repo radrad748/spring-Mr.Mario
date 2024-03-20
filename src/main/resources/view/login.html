@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
 
-    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/comm.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/login.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
@@ -21,9 +21,15 @@
         </ul>
     </div>
     <ul class="navbar-nav li-right">
-        <li class="nav-item"> <a href="#" class="nav-link"> Login </a> </li>
+        <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}"> <a href="#" class="nav-link" onclick="openModal()">Login</a> </li>
+
+        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"> <form id="logout" action="/logout" method="POST" >
+            <input id="csrf-id-logout" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <a class="nav-link" href="javascript:document.getElementById('logout').submit()">Logout</a>
+        </form> </li>
     </ul>
 </nav>
+<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
 <div class="div-front">
     <img src="/static/mario.jpg" alt="Mr.Mario" class="img-mario">
     <div class="div-welcome">
@@ -32,17 +38,18 @@
     <div class="div-sub-welcome">
         <p class="p-mr2">Изысканные блюда от лучших ресторанов вашего города ждут вас здесь. Приятного аппетита!"</p>
     </div>
-    <div class="container">
+    <div class="container" th:if="${not #authorization.expression('isAuthenticated()')}">
         <section id="content">
-            <form action="/login">
-                <h1>Login Form</h1>
+            <form action="/login" method='POST' autocomplete="off">
+                <h1>Welcome</h1>
                 <div>
-                    <input type="text" placeholder="Username" required="" id="username" />
+                    <input type="text" placeholder="Email" required="" id="username" name="username"/>
                 </div>
                 <div>
-                    <input type="password" placeholder="Password" required="" id="password" />
+                    <input type="password" placeholder="Password" required="" id="password" name="password"/>
                 </div>
                 <div>
+                    <input id="csrf-id" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <input type="submit" value="Log in" />
                     <a href="/registration">Register</a>
                 </div>
@@ -52,5 +59,17 @@
     </div>
 </div>
 
+<div id="myModal" class="modal">
+        <div id="wrapper">
+            <form id="sign_in" method="POST" action="/login" autocomplete="off">
+                <input type="text" id="usernameModal" name="username" placeholder="email" />
+                <input type="password" id="passwordModal" name="password" placeholder="password" />
+                <input id="csrf-id-modal" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit">&#xf0da;</button>
+            </form>
+        </div>
+</div>
+
+<script src="/js/common.js"></script>
 </body>
 </html>

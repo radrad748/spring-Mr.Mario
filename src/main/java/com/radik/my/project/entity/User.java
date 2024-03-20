@@ -1,9 +1,11 @@
 package com.radik.my.project.entity;
 
+import com.radik.my.project.entity.converter.RoleConverter;
 import com.radik.my.project.utils.valid.Password;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +22,14 @@ import java.util.*;
 @Table(name = "user")
 @Data
 @ToString
-public class User /*implements UserDetails*/ {
+public class User implements UserDetails {
 
     public User() {
         count = new BigDecimal("00.00");
-        role = Role.USER;
+        roles = new HashSet<>();
+        roles.add(Role.USER);
         active = true;
+        nonLocke = true;
     }
 
 
@@ -35,30 +39,67 @@ public class User /*implements UserDetails*/ {
     @NotNull
     @Size(min = 3, max = 20, message = "Длина должна быть от 2 до 50 символов")
     @Column(length = 20, nullable = false)
-    private String username;
+    private String firstName;
+    @NotNull
+    @Size(min = 3, max = 20, message = "Длина должна быть от 2 до 50 символов")
+    @Column(length = 20, nullable = false)
+    private String lastName;
     @Email(message ="Некорректный email адрес")
     @NotNull
+    @Email
     @Column(length = 50, nullable = false, unique = true)
     private String email;
     @NotNull
     @Password
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String password;
     @Column(precision = 10, scale = 2, nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal count;
-    @Enumerated(EnumType.ORDINAL)
-    private Role role;
-    @Column(columnDefinition = "BOOLEAN DEFAULT true")
+    @Column(columnDefinition = "SET('user', 'admin')")
+    @Convert(converter = RoleConverter.class)
+    private Set<Role> roles;
+    @Column(columnDefinition = "BIT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean active;
+    @Column(name = "non_locke", columnDefinition = "BIT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean nonLocke;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDate createDate;
 
-    //@Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.name()));
+        for(Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.name()));
+        }
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return nonLocke;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
     }
 
     public static UserBuilder builder() {
@@ -67,21 +108,27 @@ public class User /*implements UserDetails*/ {
 
     public static class UserBuilder {
         private Long id;
-        private String username;
+        private String firstName;
+        private String lastName;
         private String email;
         private String password;
         private BigDecimal count;
         private boolean active;
-        private Role role;
+        private Set<Role> roles;
 
         UserBuilder() {
             count = new BigDecimal("00.00");
-            role = Role.USER;
+            roles = new HashSet<>();
+            roles.add(Role.USER);
             active = true;
         }
 
-        public UserBuilder username(String username) {
-            this.username = username;
+        public UserBuilder firstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+        public UserBuilder lastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -104,23 +151,27 @@ public class User /*implements UserDetails*/ {
             return this;
         }
 
-        public UserBuilder role(Role role) {
-            this.role = role;
+        public UserBuilder roleAdd(Role role) {
+            this.roles.add(role);
+            return this;
+        }
+        public UserBuilder rolesAdd(Role... roles) {
+            this.roles.addAll(Arrays.asList(roles));
             return this;
         }
 
         public User build() {
             User user = new User();
-            user.setUsername(this.username);
+            user.setFirstName(this.firstName);
             user.setEmail(this.email);
             user.setPassword(this.password);
             user.setCount(this.count);
-            user.setRole(this.role);
+            user.setRoles(this.roles);
             return user;
         }
 
         public String toString() {
-            return "User.UserBuilder(id=" + this.id + ", name=" + this.username + ", email=" + this.email + ", password=" + this.password + ", count=" + this.count + "active=" + this.active + ", role=" + this.role + ")";
+            return "User.UserBuilder(id=" + this.id + ", name=" + this.firstName + ",lastName=" + this.lastName + ", email=" + this.email + ", password=" + this.password + ", count=" + this.count + "active=" + this.active + ", role=" + this.roles + ")";
         }
     }
 }

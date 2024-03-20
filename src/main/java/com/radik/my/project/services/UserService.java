@@ -3,15 +3,19 @@ package com.radik.my.project.services;
 import com.radik.my.project.entity.User;
 import com.radik.my.project.repositories.UserRepository;
 import com.radik.my.project.utils.exeptions.NotCorrectUserDetailsException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    private final PasswordEncoder encoder;
 
     public Optional<User> get(Long id) {
         if (id == null) throw new NotCorrectUserDetailsException("id не может быть null");
@@ -30,6 +34,10 @@ public class UserService {
 
     public User create(User user) {
         if (user == null) throw new NotCorrectUserDetailsException("user не может быть null");
+
+        String passwordEncode = encoder.encode(user.getPassword());
+        user.setPassword(passwordEncode);
+
         return userRepository.save(user);
     }
 
