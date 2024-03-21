@@ -11,12 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +55,14 @@ public class UserController {
     @GetMapping("/profile")
     String profile(Principal principal, Model model) {
         UserDto dto = UserMapper.toUserDto(userService.get(principal.getName()).get());
+        model.addAttribute("user", dto);
+        return "profile";
+    }
 
+    @PostMapping ("/account/top-up/{id}")
+    String topUp(@PathVariable Long id, @RequestParam int count, Model model) {
+        User user = userService.addCount(id, count);
+        UserDto dto = UserMapper.toUserDto(user);
         model.addAttribute("user", dto);
         return "profile";
     }

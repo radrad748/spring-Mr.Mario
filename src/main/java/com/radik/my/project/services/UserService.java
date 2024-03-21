@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -48,6 +49,20 @@ public class UserService {
         if (oldUser == null) throw new NotCorrectUserDetailsException("обновление данных user -> такого user не существует");
 
         return userRepository.save(user);
+    }
+
+    public User addCount(Long id, int count) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            if (count == 0) return optionalUser.get();
+
+            User user = optionalUser.get();
+            BigDecimal userCount = user.getCount();
+            userCount = userCount.add(new BigDecimal(count));
+            user.setCount(userCount);
+
+            return userRepository.save(user);
+        } else throw new NotCorrectUserDetailsException("user с таким email не существует");
     }
 
 

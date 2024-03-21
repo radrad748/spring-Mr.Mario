@@ -1,0 +1,35 @@
+.container-common {
+    position: fixed;
+    top: 70px;
+    left: 300px;
+    width: 70%;
+    height: 100%;
+    margin: auto;
+    background-color: #dadada;
+}
+
+.div-profile {
+    position: fixed;
+    top: 0;
+    left: 300px;
+    width: 80%;
+    height: 100%;
+    margin: auto;
+}
+
+.div-back {
+
+}
+
+.div-back::before {
+    content: "";
+    background-image: url('/static/mario_1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    position: absolute;
+    z-index: -1;
+    top: 0; left: 0; right: 0; bottom: 0;
+    height: 100%;
+    width: 100%;
+}

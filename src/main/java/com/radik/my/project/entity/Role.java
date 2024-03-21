@@ -1,8 +1,9 @@
 package com.radik.my.project.entity;
 
 
+import org.springframework.security.core.GrantedAuthority;
 
-public enum Role {
+public enum Role implements GrantedAuthority {
     ADMIN("admin"),
     USER("user");
 
@@ -15,5 +16,10 @@ public enum Role {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.name();
     }
 }
