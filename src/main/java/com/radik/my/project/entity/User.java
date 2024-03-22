@@ -37,11 +37,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Size(min = 3, max = 20, message = "Длина должна быть от 2 до 50 символов")
+    @Size(min = 3, max = 50, message = "Длина должна быть от 2 до 50 символов")
     @Column(length = 20, nullable = false)
     private String firstName;
     @NotNull
-    @Size(min = 3, max = 20, message = "Длина должна быть от 2 до 50 символов")
+    @Size(min = 3, max = 50, message = "Длина должна быть от 2 до 50 символов")
     @Column(length = 20, nullable = false)
     private String lastName;
     @Email(message ="Некорректный email адрес")
@@ -70,11 +70,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        /*List<GrantedAuthority> authorities = new ArrayList<>();
         for(Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.name()));
         }
-        return authorities;
+        return authorities; */
+        return roles;
     }
 
     @Override

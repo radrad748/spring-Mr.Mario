@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function validateFormData(firstName, lastName, email, password) {
-        if (firstName.length < 3 || firstName.length > 20) {
-            return "Имя должно иметь длину от 3 символов до 20";
+        if (firstName.length < 3 || firstName.length > 50) {
+            return "Имя должно иметь длину от 3 символов до 50";
         }
 
-        if (lastName.length < 3 || lastName.length > 20) {
-            return "Фамилия должна иметь длину от 3 символов до 20";
+        if (lastName.length < 3 || lastName.length > 50) {
+            return "Фамилия должна иметь длину от 3 символов до 50";
         }
 
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,9 +70,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => {
                 if (response.ok) {
                     window.location.href = "/success-registration";
-                } else {
-                    var errorMessage = "Введены некорректные данные";
-                    showErrorMessage(errorMessage);
+                } else  {
+                    if (response.status === 409) {
+                        return response.text().then(errorMessage => {
+                            showErrorMessage(errorMessage);
+                        });
+                    } else {
+                        var errorMessage = "Введены некорректные данные";
+                        showErrorMessage(errorMessage);
+                    }
                 }
             })
             .catch(error => {

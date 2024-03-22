@@ -48,7 +48,7 @@
         </div>
         <div id="divDeleteProfile" class="container-delete">
             <a id="delete-profile" class="span-text" href="#">
-                <span >Delete profile</span>
+                <span>Delete profile</span>
             </a>
         </div>
     </div>
@@ -89,36 +89,49 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                    Accordion Item #1
+                    Изменить имя
                 </button>
             </h2>
             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                 <div class="accordion-body">
-                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <form id="modify-name" action="#">
+                        <input id="input-firstName" type="text" name="name" placeholder="Name">
+                        <input id="csrf-id-name" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input id="user-id" type="hidden" th:value="${user.getId()}">
+                        <button type="submit" class="btn btn-secondary">Изменить</button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    Accordion Item #2
+                    Изменить фамилию
                 </button>
             </h2>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                 <div class="accordion-body">
-                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <form id="modify-surname" action="#">
+                        <input id="input-lastName" type="text" name="surname" placeholder="Surname">
+                        <input id="csrf-id-surname" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-secondary">Изменить</button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                    Accordion Item #3
+                    Изменить емайл
                 </button>
             </h2>
             <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                 <div class="accordion-body">
-                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <form id="modify-email" action="#">
+                        <input id="input-email" type="text" name="email" placeholder="Email">
+                        <input id="csrf-id-email" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-secondary">Изменить</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -126,7 +139,10 @@
 </div>
 
 <div id="myModal-profile-2" class="modal-delete-profile">
-    <button type="button" class="btn btn-secondary">Удалить</button>
+    <form id="profile-delete" th:action="@{/delete/{id}(id=${user.getId()})}" th:method="DELETE" >
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button type="submit" class="btn btn-secondary">Удалить</button>
+    </form>
 </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
 
