@@ -64,6 +64,9 @@ public class User implements UserDetails {
     @Column(name = "non_locke", columnDefinition = "BIT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean nonLocke;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Comment> comments;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDate createDate;

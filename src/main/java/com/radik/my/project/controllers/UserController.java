@@ -1,6 +1,7 @@
 package com.radik.my.project.controllers;
 
 import com.radik.my.project.entity.User;
+import com.radik.my.project.repositories.CodeAnswer;
 import com.radik.my.project.services.UserService;
 import com.radik.my.project.utils.Mappers.UserMapper;
 import com.radik.my.project.utils.dto.UserDto;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,7 +105,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("modify/email/{id}")
+    @PostMapping("/modify/email/{id}")
     ResponseEntity<String> modifyEmail(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         System.out.println(validateEmail(email));
@@ -119,6 +122,57 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/modify/password/{id}")
+    ResponseEntity<String> modifyPassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        String password = requestBody.get("password");
+        String newPassword = requestBody.get("newPassword");
+
+        String checkValidatePassword = validatePassword(password, newPassword);
+        if(!checkValidatePassword.equals("ok")) return new ResponseEntity<>(checkValidatePassword, HttpStatus.CONFLICT);
+
+        CodeAnswer code = userService.modifyPassword(id, password, newPassword);
+        if(code == CodeAnswer.WRONG_PASSWORD) return new ResponseEntity<>("Введен неверный пароль", HttpStatus.CONFLICT);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+    private String validatePassword(String password, String newPassword) {
+        if (Objects.isNull(password) || Objects.isNull(newPassword) || password.trim().isEmpty() || newPassword.trim().isEmpty())
+            return "Введены некорректные данные";
+
+        if ((password.length() < 6) || (newPassword.length() < 6) || (password.length() > 50) || (newPassword.length() > 50)) {
+            return "Пароль должен иметь длину от 6 до 50 символов";
+        }
+
+        Pattern digitPattern = Pattern.compile(".*\\d.*");
+        Matcher digitMatcherPassword = digitPattern.matcher(password);
+        Matcher digitMatcherNewPassword = digitPattern.matcher(newPassword);
+        if (!digitMatcherPassword.matches() || !digitMatcherNewPassword.matches()) {
+            return "Пароль должен содержать цифры";
+        }
+
+        Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
+        Matcher upperCaseMatcherPassword = upperCasePattern.matcher(password);
+        Matcher upperCaseMatcherNewPassword = upperCasePattern.matcher(newPassword);
+        if (!upperCaseMatcherPassword.matches() || !upperCaseMatcherNewPassword.matches()) {
+            return "Пароль должен содержать символы верхнего регистра";
+        }
+
+        Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
+        Matcher lowerCaseMatcherPassword = lowerCasePattern.matcher(password);
+        Matcher lowerCaseMatcherNewPassword = lowerCasePattern.matcher(newPassword);
+        if (!lowerCaseMatcherPassword.matches() || !lowerCaseMatcherNewPassword.matches()) {
+            return "Пароль должен содержать символы нижнего регистра";
+        }
+
+        return "ok";
+    }
+
 
     private boolean validateName(String name) {
         if (name.trim().isEmpty()) return false;

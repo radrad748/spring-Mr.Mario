@@ -5,6 +5,7 @@
     width: 70%;
     height: 100%;
     margin: auto;
+    overflow-y: auto;
     background-color: #dadada;
 }
 

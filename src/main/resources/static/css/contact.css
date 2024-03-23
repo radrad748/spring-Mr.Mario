@@ -1,0 +1,16 @@
+.mr {
+    font-size: 4.0em;
+    font-weight: bold;
+    font-style: italic;
+    color: #7a6060;
+    margin-top: 50px;
+    margin-left: 35%;
+}
+
+.div-contact {
+    padding-left: 2%;
+}
+.p-init {
+    font-size: 1.4em;
+    color: #7a6060;
+}

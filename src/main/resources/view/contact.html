@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Contact</title>
 
     <link rel="stylesheet" href="/static/css/comm.css">
-    <link rel="stylesheet" href="/static/css/registration.css">
-    <link rel="stylesheet" href="/static/css/style-registration.css">
+    <link rel="stylesheet" href="/static/css/comm_1.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/contact.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 </head>
 <body>
@@ -29,43 +30,27 @@
     </ul>
 </nav>
 <a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
-<div class="div-front">
-    <div class="container">
-        <header>
-            <h1>
-                <a href="#">
-                    <img src="/static/mario.jpg" alt="Mr.Mario" class="img-mario">
-                </a>
-            </h1>
-        </header>
-        <h1 class="text-center title">Register</h1>
-        <form id="form-register" class="registration-form" action="#" autocomplete="off">
-            <label class="col-one-half">
-                <span class="label-text">First Name</span>
-                <input type="text" name="firstName">
-            </label>
-            <label class="col-one-half">
-                <span class="label-text">Last Name</span>
-                <input type="text" name="lastName">
-            </label>
-            <label>
-                <span class="label-text">Email</span>
-                <input type="text" name="email">
-            </label>
-            <label class="password">
-                <span class="label-text">Password</span>
-                <button class="toggle-visibility" title="toggle password visibility" tabindex="-1">
-                    <span class="glyphicon glyphicon-eye-close"></span>
-                </button>
-                <input type="password" name="password">
-            </label>
-            <input id="csrf-id" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <div class="text-center">
-                <button class="submit" name="register">Sign Me Up</button>
-            </div>
-        </form>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+<div class="div-back">
+    <div class="container-common div-contact">
+        <h1 class="mr">Mr.Mario</h1><br>
+        <p class="p-init">Если у вас есть какие-либо вопросы или нужна помощь, пожалуйста, обращайтесь к нам:</p>
+        <ul>
+            <li><strong>Телефон:</strong> 022-845-223</li>
+            <li><strong>Email:</strong> mr-mario@gmail.com</li>
+            <li><strong>Адрес:</strong> Улица - Пушкин 24/5: здание - Sky Tower: офис - 5 этаж</li>
+            <li><strong>Рабочее время:</strong> 7.00-00.00</li>
+            <li><strong>Ссылки на социальные сети:</strong><a href="#">facebook.com</a> <a href="#">instagram.com</a></li>
+        </ul>
+        <br>
+        <p class="p-init">Мы ценим ваш отзыв и будем рады услышать вас!</p>
     </div>
 </div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
 <div id="myModal" class="modal">
     <div id="wrapper">
         <form id="sign_in" method="POST" action="/login" autocomplete="off">
@@ -77,7 +62,6 @@
     </div>
 </div>
 
-<script src="/js/login-register.js"></script>
 <script src="/js/common.js"></script>
 </body>
 </html>

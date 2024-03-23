@@ -1,9 +1,11 @@
 package com.radik.my.project.services;
 
 import com.radik.my.project.entity.User;
+import com.radik.my.project.repositories.CodeAnswer;
 import com.radik.my.project.repositories.UserRepository;
 import com.radik.my.project.utils.exeptions.NotCorrectUserDetailsException;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -104,6 +106,22 @@ public class UserService {
 
     public boolean ifExistId(Long id) {
         return userRepository.existsById(id);
+    }
+
+    public CodeAnswer modifyPassword(Long id, String password, String newPassword) {
+        if (id == null || id < 0 || Objects.isNull(password) || password.trim().isEmpty() ||
+                Objects.isNull(newPassword) || newPassword.trim().isEmpty())
+            throw new RuntimeException("некорректные данные");
+
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) throw new NotCorrectUserDetailsException("user с таким id не существует");
+
+        boolean checkPassword = encoder.matches(password, user.getPassword());
+        if (!checkPassword) return CodeAnswer.WRONG_PASSWORD;
+
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+        return CodeAnswer.OK;
     }
 
 }

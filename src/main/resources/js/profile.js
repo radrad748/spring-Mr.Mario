@@ -214,6 +214,75 @@ function sendEmailData(email) {
 /* изменить email */
 /* -------------------------------------------------------------------------------------- */
 
+document.getElementById('modify-password').addEventListener('submit', function (event) {
+   event.preventDefault();
+
+   var password = document.getElementById('input-password').value;
+   var newPassword = document.getElementById('input-new-password').value;
+
+   var checkPassword = validatePassword(password, newPassword);
+
+   if (checkPassword === "success") {
+      sendPasswordData(password, newPassword);
+   } else {
+      showErrorMessage(checkPassword);
+   }
+});
+
+function validatePassword(password, newPassword) {
+   if (password.length < 6 || password.length > 50 || newPassword.length < 6 || newPassword.length > 50) {
+      return "Пароль должен иметь длину от 6 до 50 символов";
+   }
+
+   if (!/[0-9]/.test(password) || !/[0-9]/.test(newPassword)) {
+      return "Пароль должен содержать цифры";
+   }
+
+   if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[a-z]/.test(newPassword) || !/[A-Z]/.test(newPassword)) {
+      return "Пароль должен содержать символы верхнего и нижнего регистра";
+   }
+   return "success";
+}
+
+function sendPasswordData(password, newPassword) {
+   var csrfToken = document.getElementById('csrf-id-password').value;
+   var id = document.getElementById('user-id').value;
+
+   var data = {
+      password: password,
+      newPassword: newPassword
+   };
+
+   fetch(`/modify/password/${id}`, {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+         'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify(data)
+   })
+       .then(response => {
+          if (response.ok) {
+             location.reload();
+          } else  {
+             if (response.status === 409) {
+                return response.text().then(errorMessage => {
+                   showErrorMessage(errorMessage);
+                });
+             } else {
+                location.reload();
+                console.error('Ошибка сервера: ' + response.status);
+             }
+          }
+       })
+       .catch(error => {
+          console.error('Произошла ошибка:', error);
+       });
+}
+
+/* изменить пароль */
+/* -------------------------------------------------------------------------------------- */
+
 function showErrorMessage(errorMessage) {
    var modalProfile = document.getElementById('myModal-profile-1');
 
