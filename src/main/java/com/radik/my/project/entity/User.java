@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -69,7 +70,7 @@ public class User implements UserDetails {
     private List<Comment> comments;
     @CreationTimestamp
     @Column(name = "create_date")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

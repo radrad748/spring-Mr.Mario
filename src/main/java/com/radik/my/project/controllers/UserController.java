@@ -37,7 +37,6 @@ public class UserController {
     private final UserService userService;
 
 
-
     @GetMapping("/")
     String home() {
         return "login";
@@ -54,7 +53,8 @@ public class UserController {
     ResponseEntity<String> userRegister(@Valid @RequestBody User user, BindingResult errors) {
         if (errors.hasErrors()) return ResponseEntity.badRequest().build();
 
-        if (userService.ifExistEmail(user.getEmail())) return new ResponseEntity<>("пользователь с таким email уже существует", HttpStatus.CONFLICT);
+        if (userService.ifExistEmail(user.getEmail()))
+            return new ResponseEntity<>("пользователь с таким email уже существует", HttpStatus.CONFLICT);
 
         userService.create(user);
         return ResponseEntity.ok().build();
@@ -66,16 +66,21 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    String profile(Principal principal, Model model) {
-        UserDto dto = UserMapper.toUserDto(userService.get(principal.getName()));
+    String profile(Principal principal, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        UserDto dto = getUserDto(principal, session);
         model.addAttribute("user", dto);
         return "profile";
     }
 
-    @PostMapping ("/account/top-up/{id}")
-    String topUp(@PathVariable Long id, @RequestParam int count, Model model) {
+    @PostMapping("/account/top-up/{id}")
+    String topUp(@PathVariable Long id, @RequestParam int count, Model model, HttpServletRequest request) {
         User user = userService.addCount(id, count);
         UserDto dto = UserMapper.toUserDto(user);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) session.setAttribute("user", dto);
+
         model.addAttribute("user", dto);
         return "profile";
     }
@@ -89,28 +94,34 @@ public class UserController {
     }
 
     @PostMapping("/modify/name/{id}")
-    ResponseEntity<Void> modifyName(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+    ResponseEntity<Void> modifyName(@PathVariable Long id, @RequestBody Map<String, String> requestBody, HttpServletRequest request) {
         String name = requestBody.get("name");
         if (!validateName(name)) return ResponseEntity.badRequest().build();
 
         userService.modifyName(id, name);
+        modifySessionUserName(request.getSession(false), name);
+
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/modify/surname/{id}")
-    ResponseEntity<Void> modifySurname(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+    ResponseEntity<Void> modifySurname(@PathVariable Long id, @RequestBody Map<String, String> requestBody, HttpServletRequest request) {
         String surname = requestBody.get("surname");
         if (!validateName(surname)) return ResponseEntity.badRequest().build();
 
         userService.modifySurname(id, surname);
+        modifySessionUserSurname(request.getSession(false), surname);
+
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/modify/email/{id}")
-    ResponseEntity<String> modifyEmail(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+    ResponseEntity<String> modifyEmail(@PathVariable Long id, @RequestBody Map<String, String> requestBody, HttpServletRequest request) {
         String email = requestBody.get("email");
         System.out.println(validateEmail(email));
         if (!validateEmail(email)) return new ResponseEntity<>("Не корректный емейл", HttpStatus.CONFLICT);
-        if (userService.ifExistEmail(email)) return new ResponseEntity<>("пользователь с таким email уже существует", HttpStatus.CONFLICT);
+        if (userService.ifExistEmail(email))
+            return new ResponseEntity<>("пользователь с таким email уже существует", HttpStatus.CONFLICT);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -119,6 +130,9 @@ public class UserController {
 
         Authentication newAuthentication = new UsernamePasswordAuthenticationToken(email, userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+
+        HttpSession session = request.getSession(false);
+        modifySessionUserEmail(session, email);
 
         return ResponseEntity.ok().build();
     }
@@ -129,16 +143,15 @@ public class UserController {
         String newPassword = requestBody.get("newPassword");
 
         String checkValidatePassword = validatePassword(password, newPassword);
-        if(!checkValidatePassword.equals("ok")) return new ResponseEntity<>(checkValidatePassword, HttpStatus.CONFLICT);
+        if (!checkValidatePassword.equals("ok"))
+            return new ResponseEntity<>(checkValidatePassword, HttpStatus.CONFLICT);
 
         CodeAnswer code = userService.modifyPassword(id, password, newPassword);
-        if(code == CodeAnswer.WRONG_PASSWORD) return new ResponseEntity<>("Введен неверный пароль", HttpStatus.CONFLICT);
+        if (code == CodeAnswer.WRONG_PASSWORD)
+            return new ResponseEntity<>("Введен неверный пароль", HttpStatus.CONFLICT);
 
         return ResponseEntity.ok().build();
     }
-
-
-
 
 
     private String validatePassword(String password, String newPassword) {
@@ -188,6 +201,46 @@ public class UserController {
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
+    }
+
+    private UserDto getUserDto(Principal principal, HttpSession session) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
+
+        if (userDto == null) {
+            userDto = UserMapper.toUserDto(userService.get(principal.getName()));
+            session.setAttribute("user", userDto);
+            return userDto;
+        }
+
+        return userDto;
+    }
+
+    private void modifySessionUserEmail(HttpSession session, String email) {
+        if (session == null) return;
+
+        UserDto dto = (UserDto) session.getAttribute("user");
+        if(dto != null) {
+            dto.setEmail(email);
+            session.setAttribute("user", dto);
+        }
+    }
+    private void modifySessionUserName(HttpSession session, String name) {
+        if (session == null) return;
+
+        UserDto dto = (UserDto) session.getAttribute("user");
+        if(dto != null) {
+            dto.setFirstName(name);
+            session.setAttribute("user", dto);
+        }
+    }
+    private void modifySessionUserSurname(HttpSession session, String surname) {
+        if (session == null) return;
+
+        UserDto dto = (UserDto) session.getAttribute("user");
+        if(dto != null) {
+            dto.setLastName(surname);
+            session.setAttribute("user", dto);
+        }
     }
 
 

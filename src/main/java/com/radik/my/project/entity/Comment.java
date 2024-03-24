@@ -23,6 +23,7 @@ public class Comment {
     @Column(length = 2000, nullable = false)
     private String text;
     @CreationTimestamp
+    @Column(name = "create_date")
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "user_id")

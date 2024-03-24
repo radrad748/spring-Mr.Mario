@@ -1,9 +1,7 @@
 package com.radik.my.project.entity;
 
 public enum RestaurantName {
-    THE_LOT("The lot"),
-    BAR_GRILL_75("Bar&Grill-75"),
-    FRENCH_MARKET("French market");
+    THE_LOT("The lot");
 
     private final String value;
 
@@ -14,4 +12,5 @@ public enum RestaurantName {
     public String getValue() {
         return value;
     }
+
 }

@@ -1,12 +1,16 @@
 package com.radik.my.project.entity;
 
+import com.radik.my.project.entity.menu.Menu;
+import com.radik.my.project.entity.menu.TypeMenu;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "restaurant")
@@ -18,14 +22,27 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 50, unique = true, nullable = false)
-    private String name;
+    private String title;
     @Column(length = 50, nullable = false)
-    private String number;
-    @Column(length = 50, nullable = false)
+    private String phone;
+    @Column(length = 100, nullable = false)
     private String address;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_id")
     private List<Comment> comments;
-    //private List<Menu> menu;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id")
+    private List<Menu> menu;
+    @CreationTimestamp
+    @Column(name = "create_date")
+    private LocalDateTime dateTime;
+
+    public static void main(String[] args) {
+        Restaurant r = new Restaurant();
+        r.setAddress("Улица: Московская 14");
+        r.setTitle(RestaurantName.THE_LOT.getValue());
+        r.setPhone("(+393) 022-565-456");
+
+    }
 
 }
