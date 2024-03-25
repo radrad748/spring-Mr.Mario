@@ -19,8 +19,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Size(min = 1, max = 2000, message = "Длина должна быть от 1 до 50 символов")
-    @Column(length = 2000, nullable = false)
+    @Size(min = 1, max = 500, message = "Длина должна быть от 1 до 50 символов")
+    @Column(length = 500, nullable = false)
     private String text;
     @CreationTimestamp
     @Column(name = "create_date")

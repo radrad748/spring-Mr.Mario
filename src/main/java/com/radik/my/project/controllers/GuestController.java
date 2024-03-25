@@ -3,6 +3,7 @@ package com.radik.my.project.controllers;
 import com.radik.my.project.entity.Restaurant;
 import com.radik.my.project.entity.RestaurantName;
 import com.radik.my.project.entity.menu.Menu;
+import com.radik.my.project.entity.menu.TypeMenu;
 import com.radik.my.project.services.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
@@ -37,6 +38,7 @@ public class GuestController {
     String restaurant(Model model) {
         Restaurant res = resService.getRestaurant(RestaurantName.THE_LOT.getValue());
         model.addAttribute("menu", res.getMenu());
+        model.addAttribute("title", res.getTitle());
 
         return "restaurant-the-lot";
     }

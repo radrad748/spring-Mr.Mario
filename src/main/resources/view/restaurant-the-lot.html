@@ -33,88 +33,140 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
 
 <div class="div-back">
-    <div class="container-common div-contact div-lot" th:each="item : ${menu}">
+    <div class="container-common div-contact div-lot">
         <p class="p-name">Ресторан: <span class="span-name">The lot</span></p>
         <br>
         <span class="span-menu">Меню</span>
         <br>
         <br>
         <span class="span-menu1">Завтрак</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).BREAKFAST}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Салаты</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).SALAD}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Пицца</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).PIZZA}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Первое блюдо</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).SOUP}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu">Десерт</span>
         <br>
         <span class="span-menu1">Торт</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).CAKE}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Мороженое</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).ICE_CREAM}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu">Алкогольные напитки</span>
         <br>
         <span class="span-menu1">Вино</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).WINE}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.7L'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Шоты</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).SHOT}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Виски</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).WHISKY}">
-            <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
+            <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.7L'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu">Безалкогольные напитки</span>
         <br>
         <span class="span-menu1">Молочные коктейли</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).MILK_SHAKE}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
-            <p class="p-menu-description" th:text="'(' + ${item.getDescription()} + ')'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Горячие напитки</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).COFFEE}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
         </div>
+        </div>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).TEA}">
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
+        </div>
         </div>
         <hr>
         <span class="span-menu1">Вода</span>
+        <div th:each="item : ${menu}">
         <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.menu.TypeMenu).WATER}">
-            <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
+            <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.5L'"></p>
+            <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
         </div>
+        </div>
+        <hr>
+        <br>
+        <span class="span-comm">Отзывы</span>
+        <div class="div-comment">
+            <form id="client-comment" class="decor" th:if="${#authorization.expression('isAuthenticated()')}">
+                <div class="form-left-decoration"></div>
+                <div class="form-right-decoration"></div>
+                <div class="circle"></div>
+                <div class="form-inner">
+                    <h3>Оставить отзыв</h3>
+                    <textarea id="client-message" placeholder="Сообщение..." rows="3" onkeydown="checkLength(event)"></textarea>
+                    <input id="submit-comment" type="submit" value="Отправить">
+                    <input id="title-restaurant" type="hidden" th:value="${title}">
+                    <input id="csrf-id-comment" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                </div>
+            </form>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
     </div>
 </div>
 
@@ -132,5 +184,6 @@
 </div>
 
 <script src="/js/common.js"></script>
+<script src="/js/comment.js"></script>
 </body>
 </html>

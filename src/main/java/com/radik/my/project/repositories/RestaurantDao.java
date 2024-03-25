@@ -17,6 +17,7 @@ public class RestaurantDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+
     public Restaurant get(String title) {
         if (Objects.isNull(title) || title.trim().isEmpty()) throw new NotCorrectUserDetailsException("Название не может быть null или пустым");
 
