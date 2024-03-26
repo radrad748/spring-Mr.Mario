@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>Restaurant</title>
+    <title>The lot</title>
 
     <link rel="stylesheet" href="/static/css/comm.css">
     <link rel="stylesheet" href="/static/css/comm_1.css">
@@ -149,7 +149,7 @@
         <hr>
         <br>
         <span class="span-comm">Отзывы</span>
-        <div class="div-comment">
+        <div id="comments" class="div-comment">
             <form id="client-comment" class="decor" th:if="${#authorization.expression('isAuthenticated()')}">
                 <div class="form-left-decoration"></div>
                 <div class="form-right-decoration"></div>
@@ -162,6 +162,21 @@
                     <input id="csrf-id-comment" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 </div>
             </form>
+            <div th:each="comm : ${comments}">
+                <span class="span-comments" th:text="${comm.getUser().getFirstName()} + ' ' + ${comm.getUser().getLastName()} + ':'"></span>
+                <div id="user-comment" class="div-comments">
+                    <p th:text="${comm.getText()}"></p>
+                    <div th:if="${#authorization.expression('isAuthenticated()') and #authentication.getName() == comm.getUser().getEmail()}">
+                        <a class="a-icons" href="#" th:onclick="'deleteComment(' + ${comm.getId()} + ')'"><span style="font-size: 7px">&#10060;</span></a>
+                    </div>
+                    <br>
+                    <hr>
+                </div>
+            </div>
+            <br>
+            <div class="div-comments" th:if="${count} > ${size}">
+                <a th:href="'/info/restaurant/the-lot?size=' + ${size + 4} + '#comments'">еще</a>
+            </div>
         </div>
         <br>
         <br>

@@ -47,3 +47,24 @@ document.getElementById('submit-comment').addEventListener('click', function (ev
             });
     }
 });
+
+function deleteComment(commentId) {
+    var csrfToken = document.getElementById('csrf-id-modal').value;
+
+    fetch('/comment/delete/' + commentId, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                console.log("Ошибка сервера: " + response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Произошла ошибка:', error);
+        });
+}
