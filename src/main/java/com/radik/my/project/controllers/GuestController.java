@@ -3,21 +3,15 @@ package com.radik.my.project.controllers;
 import com.radik.my.project.entity.Comment;
 import com.radik.my.project.entity.Restaurant;
 import com.radik.my.project.entity.RestaurantName;
-import com.radik.my.project.entity.menu.Menu;
-import com.radik.my.project.entity.menu.TypeMenu;
 import com.radik.my.project.services.CommentService;
 import com.radik.my.project.services.RestaurantService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

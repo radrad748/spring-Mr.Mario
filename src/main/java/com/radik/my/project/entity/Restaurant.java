@@ -1,16 +1,12 @@
 package com.radik.my.project.entity;
 
-import com.radik.my.project.entity.menu.Menu;
-import com.radik.my.project.entity.menu.TypeMenu;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "restaurant")

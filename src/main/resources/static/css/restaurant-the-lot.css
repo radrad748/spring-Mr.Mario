@@ -80,8 +80,19 @@
     text-decoration: none;
     float: right;
 }
-
-
+.menu-item {
+    display: flex;
+    align-items: center;
+}
+.bt-product {
+    float: right;
+    margin-right: 20%;
+}
+.scroll-order {
+    position: fixed;
+    right: 330px;
+    display: none;
+}
 
 
 

@@ -1,6 +1,5 @@
-package com.radik.my.project.entity.menu;
+package com.radik.my.project.entity;
 
-import com.radik.my.project.entity.Restaurant;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,8 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "menu")
