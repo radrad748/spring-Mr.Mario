@@ -2,9 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The lot</title>
+    <title>Order</title>
+
+    <link rel="stylesheet" href="/static/css/comm.css">
+    <link rel="stylesheet" href="/static/css/comm_1.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/order-preparation.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark my-nav"> <button class="navbar-toggler" type="button" data-target="#navigation"> <span class="navbar-toggler-icon"></span> </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item active"> <a href="/" class="nav-link"> Home </a> </li>
+            <li class="nav-item"> <a href="/info/restaurants" class="nav-link"> Restaurants </a> </li>
+            <li class="nav-item"> <a href="#" class="nav-link"> About </a> </li>
+            <li class="nav-item"> <a href="/info/contact" class="nav-link"> Contact Us </a> </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav li-right">
+        <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}"> <a href="#" class="nav-link" onclick="openModal()">Login</a> </li>
 
+        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"> <form id="logout" action="/logout" method="POST" >
+            <input id="csrf-id-logout" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <a class="nav-link" href="javascript:document.getElementById('logout').submit()">Logout</a>
+        </form> </li>
+    </ul>
+</nav>
+<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+<div class="div-back">
+    <div id="div-main" class="container-common div-contact">
+        <div id="orderListData" th:data-orderList="${orderListJson}" th:data-totalPrice="${totalPrice}" style="display: none;"></div>
+        <span class="span-title">Заказ</span>
+        <br>
+        <br>
+        <div class="order-table">
+            <div th:each="order : ${orderList}">
+                <div th:id="'item-' + ${order.getMenu().getId()}" class="div-subject">
+                    <div class="div-subject1">
+                        <span class="span-menu-name" th:text="${order.getMenu().getName()}"></span>
+                        <p th:id="'p-quantity-' + ${order.getMenu().getId()}" class="p-menu" th:text="${order.getMenu().getPrice()} + '$ - ' + ${order.getCount()} + 'шт.'"></p>
+                    </div>
+                    <div class="div-subject1">
+                        <button id="decrement" th:onclick="'decrement(\'' + ${order.getMenu().getId()} + '\', \'' + ${order.getMenu().getPrice()} + '\')'">-</button>
+                        <span th:id="'quantity-' + ${order.getMenu().getId()}" th:text="${order.getCount()}"></span>
+                        <button id="increment" th:onclick="'increment(\'' + ${order.getMenu().getId()} + '\', \'' + ${order.getMenu().getPrice()} + '\')'">+</button>
+                        <button style="float: right" type="button" class="btn-close" aria-label="Close" th:onclick="'deleteOrder(' + ${order.getMenu().getId()} + ',' + ${order.getMenu().getPrice()} + ')'"></button>
+                    </div>
+                </div>
+                <hr th:id="'hr-' + ${order.getMenu().getId()}">
+            </div>
+        </div>
+        <p id="totalPrice" class="p-total-price" th:text="'Стоимость: ' + ${totalPrice} + '$'"></p>
+        <form style="margin-left: 2px">
+            <button type="button" class="btn btn-info" th:onclick="'makeOrder(\'' + ${user.getCount()} + '\')'">Заказать</button>
+        </form>
+        <br>
+        <br>
+        <p class="p-current-count" th:text="'Мой текущий счет: ' + ${user.getCount()} + '$'"></p>
+    </div>
+</div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+<div id="myModal" class="modal">
+    <div id="wrapper">
+        <form id="sign_in" method="POST" action="/login" autocomplete="off">
+            <input type="text" id="usernameModal" name="username" placeholder="email" />
+            <input type="password" id="passwordModal" name="password" placeholder="password" />
+            <input id="csrf-id-modal" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button type="submit">&#xf0da;</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/order-preparation.js"></script>
 </body>
 </html>

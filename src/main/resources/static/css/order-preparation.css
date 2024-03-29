@@ -1,0 +1,73 @@
+.span-title {
+    font-size: 2.0em;
+    font-weight: bold;
+    font-style: italic;
+    color: #7a6060;
+    margin-left: 43%;
+}
+.span-menu-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    font-style: italic;
+    color: #7a6060;
+}
+.div-subject {
+    width: 100%;
+}
+.div-subject1 {
+    width: 100%;
+    display: inline-block;
+}
+.p-menu {
+    font-size: 1.2em;
+    color: #7a6060;
+    float: right;
+}
+.order-table {
+    position: static;
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+.p-current-count {
+    font-size: 1.0em;
+    color: #7a6060;
+}
+.p-total-price {
+    font-size: 1.4em;
+    color: #7a6060;
+}
+
+
+
+
+
+
+
+#decrement,
+#increment {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#decrement:hover,
+#increment:hover {
+    background-color: #45a049;
+}
+
+#quantity {
+    padding: 5px 10px;
+    font-size: 14px;
+    display: inline-block;
+}
+

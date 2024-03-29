@@ -68,6 +68,9 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Order> orders;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime createDate;

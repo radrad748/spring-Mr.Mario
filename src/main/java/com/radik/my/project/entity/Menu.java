@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "menu")
@@ -27,6 +28,11 @@ public class Menu {
     private Restaurant restaurant;
     @Enumerated(EnumType.ORDINAL)
     private TypeMenu typeMenu;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "order_menu",
+            joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
+    private List<Order> orders;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime dateTime;

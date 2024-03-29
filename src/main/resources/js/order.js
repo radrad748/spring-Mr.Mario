@@ -19,7 +19,7 @@ document.getElementById('scroll-order').addEventListener('click', function (even
     event.preventDefault();
 
     var csrfToken = document.getElementById('csrf-id-modal').value;
-    order.restaurantName = 'The lot';
+    order.restaurantTitle = 'The lot';
 
 
     fetch('/order/preparation', {

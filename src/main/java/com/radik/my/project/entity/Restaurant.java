@@ -29,6 +29,9 @@ public class Restaurant {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")
     private List<Menu> menu;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
+    private List<Order> orders;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime dateTime;
