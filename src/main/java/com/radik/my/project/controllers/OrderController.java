@@ -74,13 +74,12 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<String> order(@RequestBody Map<String, String> requestBody, HttpSession session, Order order) {
+    ResponseEntity<String> order(@RequestBody Map<String, String> requestBody, HttpSession session) {
         Restaurant res = (Restaurant) session.getAttribute("restaurant");
         String totalPrice = requestBody.get("totalPrice");
         UserDto userDto = (UserDto) session.getAttribute("user");
 
-        int compare = userDto.getCount().compareTo(new BigDecimal(totalPrice));
-        if (compare < 0) return new ResponseEntity<>("Недостаточно средств", HttpStatus.PAYMENT_REQUIRED);
+
 
         return ResponseEntity.ok().build();
     }
@@ -135,5 +134,6 @@ public class OrderController {
         }
         return result;
     }
+
 
 }

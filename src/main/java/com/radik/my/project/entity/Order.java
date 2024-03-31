@@ -1,5 +1,6 @@
 package com.radik.my.project.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
@@ -14,7 +15,19 @@ import java.util.List;
 @Table(name = "order_table")
 @Data
 @ToString
+@Builder
 public class Order {
+    public Order() {}
+
+    public Order(Long id, Restaurant restaurant, User user, BigDecimal sum, boolean delivery, List<Menu> menu, LocalDateTime createDate) {
+        this.id = id;
+        this.restaurant = restaurant;
+        this.user = user;
+        this.sum = sum;
+        this.delivery = delivery;
+        this.menu = menu;
+        this.createDate = createDate;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
