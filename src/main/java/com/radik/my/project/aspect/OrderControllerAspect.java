@@ -23,7 +23,6 @@ public class OrderControllerAspect {
     @Around("execution(* com.radik.my.project.controllers.OrderController.*(..)) && args(requestBody, session)")
     public ResponseEntity<String> checkOrderRequestBody(ProceedingJoinPoint joinPoint, Map<String, String> requestBody, HttpSession session) throws Throwable {
         String totalPrice = requestBody.get("totalPrice");
-        requestBody.remove("totalPrice");
         if (Objects.isNull(totalPrice) || totalPrice.trim().isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         try {

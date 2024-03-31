@@ -39,6 +39,22 @@
     font-size: 1.4em;
     color: #7a6060;
 }
+.input-address-phone {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    width: 300px;
+    font-size: 16px;
+}
+.address-input {
+    background-color: #f0f0f0;
+    color: #333;
+}
+.phone-input {
+    background-color: #fafafa;
+    color: #333;
+}
 
 
 

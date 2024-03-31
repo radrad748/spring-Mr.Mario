@@ -2,10 +2,8 @@ package com.radik.my.project.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.radik.my.project.entity.Menu;
-import com.radik.my.project.entity.Order;
-import com.radik.my.project.entity.OrderModel;
-import com.radik.my.project.entity.Restaurant;
+import com.radik.my.project.entity.*;
+import com.radik.my.project.services.OrderService;
 import com.radik.my.project.services.RestaurantService;
 import com.radik.my.project.services.UserService;
 import com.radik.my.project.utils.Mappers.MenuMapper;
@@ -34,6 +32,7 @@ public class OrderController {
 
     private final RestaurantService resService;
     private final UserService userService;
+    private final OrderService orderService;
 
     @GetMapping("/preparation")
     String orderPage(HttpSession session, Model model) {
@@ -77,11 +76,23 @@ public class OrderController {
     ResponseEntity<String> order(@RequestBody Map<String, String> requestBody, HttpSession session) {
         Restaurant res = (Restaurant) session.getAttribute("restaurant");
         String totalPrice = requestBody.get("totalPrice");
+        requestBody.remove("totalPrice");
+        BigDecimal price = new BigDecimal(totalPrice);
         UserDto userDto = (UserDto) session.getAttribute("user");
+        User user = userService.get(userDto.getEmail());
 
+        orderService.saveOrder(res, user, price, requestBody);
 
+        BigDecimal newUserCount = userDto.getCount().subtract(price);
+        userDto.setCount(newUserCount);
+        session.setAttribute("user", userDto);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/success-order")
+    String successOrder() {
+        return "success-order";
     }
 
 

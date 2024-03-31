@@ -132,7 +132,7 @@ function sendOrder() {
     })
         .then(response => {
             if (response.ok) {
-
+                window.location.href = "/order/success-order";
             } else {
                 return response.text()
                     .then(errorMessage => {
