@@ -19,11 +19,13 @@ public class OrderService {
     private final UserService userService;
 
     @Transactional
-    public void saveOrder(Restaurant res, User user, BigDecimal sum, Map<String, String> menu) {
+    public void saveOrder(Restaurant res, User user, BigDecimal sum, String address, String phone, Map<String, String> menu) {
         Order order = Order.builder()
                 .restaurant(res)
                 .user(user)
                 .sum(sum)
+                .address(address)
+                .phone(phone)
                 .delivery(true)
                 .build();
 

@@ -1,7 +1,7 @@
 package com.radik.my.project.repositories;
 
 import com.radik.my.project.entity.Restaurant;
-import com.radik.my.project.utils.exeptions.NotCorrectUserDetailsException;
+import com.radik.my.project.utils.exceptions.NotCorrectUserDetailsException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

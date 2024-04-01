@@ -58,15 +58,13 @@
             </div>
         </div>
         <p id="totalPrice" class="p-total-price" th:text="'Стоимость: ' + ${totalPrice} + '$'"></p>
-        <form style="margin-left: 2px">
+        <form id="order-button" style="margin-left: 2px">
             <label for="client-address">Адрес:</label><br>
             <input type="text" id="client-address" name="address" class="input-address-phone address-input" placeholder="Enter your address.."><br>
             <label for="client-phone">Телефон:</label><br>
             <input type="number" id="client-phone" name="phone" class="input-address-phone phone-input" placeholder="Enter your phone number.."><br>
             <button type="button" class="btn btn-info" th:onclick="'makeOrder(\'' + ${user.getCount()} + '\')'">Заказать</button>
         </form>
-        <br>
-        <br>
         <p class="p-current-count" th:text="'Мой текущий счет: ' + ${user.getCount()} + '$'"></p>
     </div>
 </div>

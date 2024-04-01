@@ -25,6 +25,12 @@ public class OrderControllerAspect {
         String totalPrice = requestBody.get("totalPrice");
         if (Objects.isNull(totalPrice) || totalPrice.trim().isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+        String address = requestBody.get("address");
+        if (Objects.isNull(address) || address.trim().isEmpty() || address.length() < 6 || address.length() > 100) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        String phone = requestBody.get("phone");
+        if (Objects.isNull(phone) || phone.trim().isEmpty() || phone.length() < 6 || phone.length() > 25) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         try {
             if (Double.parseDouble(totalPrice) <= 0){
                 return ResponseEntity.badRequest().build();

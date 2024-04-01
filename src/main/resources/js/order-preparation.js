@@ -100,26 +100,37 @@ function incrementTotalPrice(price) {
 /* --------------------------------------------------------------------------------------- */
 
 function makeOrder(userCount) {
+    var address = document.getElementById('client-address').value;
+    var phone = document.getElementById('client-phone').value;
+    var checkData = checkAddressAndPhone(address, phone);
+
     if (parseFloat(userCount) < parseFloat(totalPrice)) {
         var message = "Недостаточно средств";
         showCountMessage(message);
+    } else if (checkData !== "ok") {
+        showCountMessage(checkData);
     } else {
-        sendOrder();
+        sendOrder(address, phone);
     }
 }
 
 function showCountMessage(message) {
-    var divMain = document.getElementById('div-main');
+    var form = document.getElementById('order-button');
+    var checkFault = document.getElementById('p-fault');
+    if (checkFault) checkFault.remove();
 
     var textMessage = document.createElement("p");
+    textMessage.id = "p-fault"
     textMessage.textContent = message;
     textMessage.style.color = "red";
 
-    divMain.appendChild(textMessage);
+    form.appendChild(textMessage);
 }
 
-function sendOrder() {
+function sendOrder(address, phone) {
     order['totalPrice'] = totalPrice;
+    order['address'] = address;
+    order['phone'] = phone;
     var csrfToken = document.getElementById('csrf-id-modal').value;
 
     fetch('/order/create', {
@@ -133,16 +144,31 @@ function sendOrder() {
         .then(response => {
             if (response.ok) {
                 window.location.href = "/order/success-order";
-            } else {
+            } else if (response.status === 402) {
                 return response.text()
                     .then(errorMessage => {
                         showCountMessage(errorMessage);
                 });
+            } else if (response.status === 400) {
+                console.log('Не корректный запрос: ' + response.status);
             }
         })
         .catch(error => {
             console.error('Произошла ошибка:', error);
         });
+}
+
+function checkAddressAndPhone(address, phone) {
+    var addressLength = address.trim().length;
+    var phoneLength = phone.trim().length;
+
+    if (addressLength < 6 || addressLength > 100) {
+        return "Введен не корректный адрес";
+    }
+    if (phoneLength < 6 || phoneLength > 25) {
+        return "Введен не корректный номер";
+    }
+    return "ok";
 }
 
 /* делать заказ */

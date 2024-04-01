@@ -76,12 +76,16 @@ public class OrderController {
     ResponseEntity<String> order(@RequestBody Map<String, String> requestBody, HttpSession session) {
         Restaurant res = (Restaurant) session.getAttribute("restaurant");
         String totalPrice = requestBody.get("totalPrice");
+        String address = requestBody.get("address");
+        String phone = requestBody.get("phone");
         requestBody.remove("totalPrice");
+        requestBody.remove("address");
+        requestBody.remove("phone");
         BigDecimal price = new BigDecimal(totalPrice);
         UserDto userDto = (UserDto) session.getAttribute("user");
         User user = userService.get(userDto.getEmail());
 
-        orderService.saveOrder(res, user, price, requestBody);
+        orderService.saveOrder(res, user, price, address, phone, requestBody);
 
         BigDecimal newUserCount = userDto.getCount().subtract(price);
         userDto.setCount(newUserCount);

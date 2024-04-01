@@ -1,0 +1,19 @@
+.img-mario {
+    width: 400px;
+    height: auto;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-left: 37%;
+    margin-top: 3%;
+}
+.p-message {
+    color: #7a6060;
+    font-size: 20px;
+    text-align: center;
+}
+.mr {
+    font-size: 2.0em;
+    font-weight: bold;
+    font-style: italic;
+    color: #7a6060;
+}

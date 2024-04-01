@@ -1,4 +1,4 @@
-package com.radik.my.project.utils.exeptions;
+package com.radik.my.project.utils.exceptions;
 
 public class NotCorrectUserDetailsException extends RuntimeException{
     public NotCorrectUserDetailsException(String message) {

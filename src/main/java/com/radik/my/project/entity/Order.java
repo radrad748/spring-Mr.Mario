@@ -20,13 +20,15 @@ import java.util.List;
 public class Order {
     public Order() {}
 
-    public Order(Long id, Restaurant restaurant, User user, BigDecimal sum, boolean delivery, List<CountMenuOrder> countMo, LocalDateTime createDate) {
+    public Order(Long id, Restaurant restaurant, User user, BigDecimal sum, boolean delivery, List<CountMenuOrder> countMo, String address, String phone, LocalDateTime createDate) {
         this.id = id;
         this.restaurant = restaurant;
         this.user = user;
         this.sum = sum;
         this.delivery = delivery;
         this.countMo = countMo;
+        this.address = address;
+        this.phone = phone;
         this.createDate = createDate;
     }
 
@@ -47,6 +49,10 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private List<CountMenuOrder> countMo;
+    @Column(length = 100)
+    private String address;
+    @Column(length = 25)
+    private String phone;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime createDate;

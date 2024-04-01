@@ -118,7 +118,7 @@ public class UserController {
     @PostMapping("/modify/email/{id}")
     ResponseEntity<String> modifyEmail(@PathVariable Long id, @RequestBody Map<String, String> requestBody, HttpServletRequest request) {
         String email = requestBody.get("email");
-        System.out.println(validateEmail(email));
+
         if (!validateEmail(email)) return new ResponseEntity<>("Не корректный емейл", HttpStatus.CONFLICT);
         if (userService.ifExistEmail(email))
             return new ResponseEntity<>("пользователь с таким email уже существует", HttpStatus.CONFLICT);
