@@ -1,4 +1,4 @@
-package com.radik.my.project.entity;
+package com.radik.my.project.entity.enums;
 
 public enum TypeMenu {
     BREAKFAST,

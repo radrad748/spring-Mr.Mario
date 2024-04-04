@@ -2,7 +2,7 @@ package com.radik.my.project.controllers;
 
 import com.radik.my.project.entity.Comment;
 import com.radik.my.project.entity.Restaurant;
-import com.radik.my.project.entity.RestaurantName;
+import com.radik.my.project.entity.enums.RestaurantName;
 import com.radik.my.project.services.CommentService;
 import com.radik.my.project.services.RestaurantService;
 import lombok.RequiredArgsConstructor;

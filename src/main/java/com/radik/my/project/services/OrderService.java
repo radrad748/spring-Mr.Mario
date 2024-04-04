@@ -1,15 +1,21 @@
 package com.radik.my.project.services;
 
 import com.radik.my.project.entity.*;
+import com.radik.my.project.entity.enums.PeriodOrders;
 import com.radik.my.project.repositories.OrderDao;
+import com.radik.my.project.utils.Mappers.OrderMapper;
+import com.radik.my.project.utils.dto.OrderDto;
+import com.radik.my.project.utils.exceptions.NotCorrectDataServices;
+import com.radik.my.project.utils.exceptions.NotCorrectUserDetailsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +43,22 @@ public class OrderService {
         userService.update(user);
     }
 
+    @Transactional
+    public List<OrderDto> getOrdersDto(User user, PeriodOrders period) {
+        if (Objects.isNull(user) || Objects.isNull(period)) throw new NotCorrectUserDetailsException("Входные данные не могут быть null");
+
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = getStartDateForUserOrders(endDate, period);
+
+        List<Order> orders = orderDao.getOrders(user, startDate, endDate);
+
+        if (orders.isEmpty()) return new ArrayList<>();
+
+        return OrderMapper.getListOrdersDto(orders);
+    }
+
+    /* --------------------------------------------------------------------------------------------------- */
+
     private void addListCountMenuOrderToOrder(Order order, Map<String, String> mapMenu, List<Menu> resMenu) {
         List<CountMenuOrder> listCmo = new ArrayList<>();
 
@@ -59,6 +81,21 @@ public class OrderService {
         order.setCountMo(listCmo);
     }
 
+
+    private LocalDateTime getStartDateForUserOrders(LocalDateTime endDate, PeriodOrders period) {
+        switch (period) {
+            case WEEK:
+                return endDate.minusWeeks(1);
+            case MONTH:
+                return endDate.minusMonths(1);
+            case YEAR:
+                return endDate.minusYears(1);
+            case ALL_THE_TIME:
+                return LocalDateTime.of(2024, 1, 1, 0, 0, 0);
+            default:
+                return null;
+        }
+    }
 
 
 

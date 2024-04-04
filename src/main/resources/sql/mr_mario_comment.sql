@@ -16,27 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `comment`
---
-
-DROP TABLE IF EXISTS `comment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `comment` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `create_date` datetime(6) DEFAULT NULL,
-  `text` varchar(500) NOT NULL,
-  `restaurant_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKp9p1ypcnbyl8gqxmwya9oojn8` (`restaurant_id`),
-  KEY `FK8kcum44fvpupyw6f5baccx25c` (`user_id`),
-  CONSTRAINT `FK8kcum44fvpupyw6f5baccx25c` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FKp9p1ypcnbyl8gqxmwya9oojn8` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `comment`
 --
 
@@ -55,4 +34,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-02 16:06:00
+-- Dump completed on 2024-04-03 13:54:22

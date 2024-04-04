@@ -1,6 +1,6 @@
 package com.radik.my.project.utils.dto;
 
-import com.radik.my.project.entity.TypeMenu;
+import com.radik.my.project.entity.enums.TypeMenu;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;

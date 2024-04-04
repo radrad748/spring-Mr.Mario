@@ -1,13 +1,13 @@
 package com.radik.my.project.entity;
 
 import com.radik.my.project.entity.converter.RoleConverter;
+import com.radik.my.project.entity.enums.Role;
 import com.radik.my.project.utils.valid.Password;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -15,7 +15,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -171,6 +170,7 @@ public class User implements UserDetails {
         public User build() {
             User user = new User();
             user.setFirstName(this.firstName);
+            user.setLastName(this.lastName);
             user.setEmail(this.email);
             user.setPassword(this.password);
             user.setCount(this.count);

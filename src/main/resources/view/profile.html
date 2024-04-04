@@ -30,7 +30,7 @@
         </form> </li>
     </ul>
 </nav>
-<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+<a href="/profile?period=week" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
 
 <!-- ----------------------------------------------------------------------------------------------- -->
 
@@ -42,6 +42,9 @@
         <p class="p-info" th:text="'Текущий счет: ' + ${user.getCount()} + '$'"></p>
         <div id="div-top-up" class="wrapper">
             <a id="top-up" class="a-top-up" href="#"><span>Top up</span></a>
+        </div>
+        <div id="div-my-orders" class="wrapper2">
+            <a id="my-orders" class="a-top-up" href="#"><span>My orders</span></a>
         </div>
         <div id="div-change-data" class="wrapper1">
             <a id="change-data" class="a-change-data" href="#"><span>Change data</span></a>
@@ -154,6 +157,58 @@
         </div>
     </div>
 </div>
+
+<div id="modal-my-orders" class="modal-orders">
+    <div class="button-show-orders">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            За последнюю неделю
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">За последнюю неделю</a></li>
+            <li><a class="dropdown-item" href="#">За последний месяц</a></li>
+            <li><a class="dropdown-item" href="#">За последний год</a></li>
+            <li><a class="dropdown-item" href="#">За все время</a></li>
+        </ul>
+    </div>
+
+    <div style="margin-left: 10%" th:if="${#lists.isEmpty(listOrders)}">
+        <p style="font-size: 24px; font-style: italic;">У вас пока нет заказов</p>
+    </div>
+
+    <div class="list-orders" th:if="${not #lists.isEmpty(listOrders)}">
+        <p style="font-size: 24px; font-style: italic;">Заказы</p>
+        <div th:each="order : ${listOrders}">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text="'Дата заказа: ' + ${order.getDate()}"></li>
+                <li class="list-group-item" th:text="'Ресторан: ' + ${order.getNameRestaurant()}"></li>
+                <li class="list-group-item" th:text="'Сумма заказа: ' + ${order.getSum()} + '$'"></li>
+                <li class="list-group-item"></li>
+            </ul>
+           <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Лист
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" th:each="product : ${order.getListMenu()}">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:text="'Имя продукта: ' + ${product.getMenu().getName()}"></li>
+                                <li class="list-group-item" th:text="'Цена: ' + ${product.getMenu().getPrice()} + '$'"></li>
+                                <li class="list-group-item" th:text="'Кол-во: ' + ${product.getCount()}"></li>
+                                <li class="list-group-item"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+
 
 <div id="myModal-profile-2" class="modal-delete-profile">
     <form id="profile-delete" th:action="@{/delete/{id}(id=${user.getId()})}" th:method="DELETE" >

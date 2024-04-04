@@ -28,7 +28,7 @@
         </form> </li>
     </ul>
 </nav>
-<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+<a href="/profile?period=week" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
 <div class="div-front" style="padding-top: 10%">
     <h1 class="title">Вы успешно зарегистрировались <a href="/" style="text-decoration: none">войдите в свой аккаунт</a></h1>
 </div>

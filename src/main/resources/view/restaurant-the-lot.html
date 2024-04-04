@@ -28,7 +28,7 @@
         </form> </li>
     </ul>
 </nav>
-<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+<a href="/profile?period=week" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
 <!-- ----------------------------------------------------------------------------------------------- -->
 
 <div class="div-back">
@@ -41,7 +41,7 @@
         <br>
         <span class="span-menu1">Завтрак</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).BREAKFAST}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).BREAKFAST}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -50,7 +50,7 @@
         <hr>
         <span class="span-menu1">Салаты</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).SALAD}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).SALAD}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -59,7 +59,7 @@
         <hr>
         <span class="span-menu1">Пицца</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).PIZZA}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).PIZZA}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -68,7 +68,7 @@
         <hr>
         <span class="span-menu1">Первое блюдо</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).SOUP}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).SOUP}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -79,7 +79,7 @@
         <br>
         <span class="span-menu1">Торт</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).CAKE}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).CAKE}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -88,7 +88,7 @@
         <hr>
         <span class="span-menu1">Мороженое</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).ICE_CREAM}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).ICE_CREAM}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -99,7 +99,7 @@
         <br>
         <span class="span-menu1">Вино</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).WINE}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).WINE}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.7L'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -108,7 +108,7 @@
         <hr>
         <span class="span-menu1">Шоты</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).SHOT}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).SHOT}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -117,7 +117,7 @@
         <hr>
         <span class="span-menu1">Виски</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).WHISKY}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).WHISKY}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.7L'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -128,7 +128,7 @@
         <br>
         <span class="span-menu1">Молочные коктейли</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).MILK_SHAKE}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).MILK_SHAKE}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -137,14 +137,14 @@
         <hr>
         <span class="span-menu1">Горячие напитки</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).COFFEE}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).COFFEE}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
         </div>
         </div>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).TEA}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).TEA}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>
@@ -153,7 +153,7 @@
         <hr>
         <span class="span-menu1">Вода</span>
         <div th:each="item : ${menu}">
-        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.TypeMenu).WATER}">
+        <div th:if="${item.getTypeMenu() == T(com.radik.my.project.entity.enums.TypeMenu).WATER}">
             <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-dark btn-sm bt-product" th:onclick="'addProduct(' + ${item.getId()} + ')'">в корзину</button>
             <p class="p-menu" th:text="${item.getName()} + ' ----------------- ' + ${item.getPrice()} + '$ 0.5L'"></p>
             <p class="p-menu-description" th:text="${item.getDescription() != '' ? '(' + item.getDescription() + ')' : ''}"></p>

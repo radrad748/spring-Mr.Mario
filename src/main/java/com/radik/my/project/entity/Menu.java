@@ -1,5 +1,6 @@
 package com.radik.my.project.entity;
 
+import com.radik.my.project.entity.enums.TypeMenu;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;

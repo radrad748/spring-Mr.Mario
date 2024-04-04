@@ -1,9 +1,13 @@
 package com.radik.my.project.controllers;
 
+import com.radik.my.project.entity.Order;
 import com.radik.my.project.entity.User;
+import com.radik.my.project.entity.enums.PeriodOrders;
 import com.radik.my.project.repositories.CodeAnswer;
+import com.radik.my.project.services.OrderService;
 import com.radik.my.project.services.UserService;
 import com.radik.my.project.utils.Mappers.UserMapper;
+import com.radik.my.project.utils.dto.OrderDto;
 import com.radik.my.project.utils.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,9 +28,7 @@ import javax.servlet.http.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,7 @@ import java.util.regex.Pattern;
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
 
     @GetMapping("/")
@@ -66,10 +69,15 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    String profile(Principal principal, Model model, HttpServletRequest request) {
+    String profile(Principal principal, @RequestParam("period") String periodOrders, Model model, HttpServletRequest request) {
+        PeriodOrders period = getPeriod(periodOrders);
         HttpSession session = request.getSession(true);
         UserDto dto = getUserDto(principal, session);
         model.addAttribute("user", dto);
+
+        List<OrderDto> orders = orderService.getOrdersDto(userService.get(dto.getId()), period);
+        model.addAttribute("listOrders", orders);
+
         return "profile";
     }
 
@@ -152,6 +160,9 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+
+    /* ----------------------------------------------------------------------------------------------------- */
 
 
     private String validatePassword(String password, String newPassword) {
@@ -241,6 +252,13 @@ public class UserController {
             dto.setLastName(surname);
             session.setAttribute("user", dto);
         }
+    }
+
+    private PeriodOrders getPeriod(String period) {
+        for (PeriodOrders p : PeriodOrders.values()) {
+            if (p.getValue().equals(period)) return p;
+        }
+        return null;
     }
 
 

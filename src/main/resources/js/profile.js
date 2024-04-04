@@ -310,3 +310,26 @@ function validateName(name) {
 }
 /* общие методы */
 /* -------------------------------------------------------------------------------------- */
+
+var myOrders = document.getElementById('my-orders');
+var modalMyOrders = document.getElementById('modal-my-orders');
+var divMyOrders =  document.getElementById('div-my-orders');
+
+myOrders.addEventListener('click', function (event) {
+   event.preventDefault();
+
+   modalMyOrders.style.display = 'block';
+});
+
+document.addEventListener('click', function (event) {
+   if (!modalMyOrders.contains(event.target) && !divMyOrders.contains(event.target)) {
+      modalMyOrders.style.display = 'none';
+   }
+});
+/* модальное окно для заказов */
+/* -------------------------------------------------------------------------------------- */
+
+
+
+/* получение заказов */
+/* -------------------------------------------------------------------------------------- */

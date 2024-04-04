@@ -30,7 +30,7 @@
         </form> </li>
     </ul>
 </nav>
-<a href="/profile" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+<a href="/profile?period=week" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
 
 <!-- ----------------------------------------------------------------------------------------------- -->
 

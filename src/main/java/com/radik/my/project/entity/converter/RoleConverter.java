@@ -1,6 +1,6 @@
 package com.radik.my.project.entity.converter;
 
-import com.radik.my.project.entity.Role;
+import com.radik.my.project.entity.enums.Role;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
