@@ -1,6 +1,7 @@
 var topUp = document.getElementById('top-up');
 var modalTopUp = document.getElementById('myModal-profile');
 var divTopUp = document.getElementById('div-top-up');
+var buttonIdCounter = 1;
 
 topUp.addEventListener('click', function (event) {
    event.preventDefault();
@@ -329,7 +330,179 @@ document.addEventListener('click', function (event) {
 /* модальное окно для заказов */
 /* -------------------------------------------------------------------------------------- */
 
+function getProducts(period) {
+   var button = document.getElementById('orders-button');
+   button.textContent = textButton(period);
 
+   var url = '/order/user/orders?period=' + period;
+
+   fetch(url)
+       .then(response => {
+          if (!response.ok) {
+             throw new Error('Код ответа: ' + response.status);
+          }
+          return response.json();
+       })
+       .then(data => {
+         showNewListOfProducts(data);
+       })
+       .catch(error => {
+          console.error('Ошибка', error);
+       });
+}
+
+function showNewListOfProducts(data) {
+   var divOrders = document.getElementById('div-orders');
+   if (divOrders) {
+      divOrders.remove();
+   }
+
+   var mainDivOrders = document.getElementById('main-div-orders');
+   mainDivOrders.innerHTML = '';
+
+   var pTitle = document.createElement('p');
+   pTitle.textContent = 'Заказы';
+   pTitle.style.fontSize = '24px';
+   pTitle.style.fontStyle = 'italic';
+   mainDivOrders.appendChild(pTitle);
+
+   var newDivOrders = document.createElement('div');
+   newDivOrders.id = 'div-orders';
+   mainDivOrders.appendChild(newDivOrders);
+
+
+   data.forEach(function (order) {
+
+      var ulElement = document.createElement('ul');
+      ulElement.classList.add('list-group', 'list-group-flush');
+      addLiElements(ulElement, order);
+      newDivOrders.appendChild(ulElement);
+
+      /* --------------------------------------------------------------------------- */
+      /* добавляем лист */
+
+      var generalListMenu = document.createElement("div");
+      generalListMenu.classList.add('accordion');
+
+      var subGeneralListMenu = document.createElement('div');
+      subGeneralListMenu.classList.add('accordion-item');
+
+      generalListMenu.appendChild(subGeneralListMenu);
+
+      var productsDiv = document.createElement('div');
+      productsDiv.classList.add('accordion-collapse', 'collapse');
+      productsDiv.setAttribute('data-bs-parent', '#accordionExample');
+
+      addButtonList(subGeneralListMenu, productsDiv);
+      subGeneralListMenu.appendChild(productsDiv);
+
+      order.listMenu.forEach(function (menu) {
+
+         var divSpaceForMenu = document.createElement('div');
+         divSpaceForMenu.classList.add('accordion-body');
+         addUlElementForDivMenu(divSpaceForMenu, menu);
+
+         productsDiv.appendChild(divSpaceForMenu);
+
+      });
+
+      newDivOrders.appendChild(generalListMenu);
+
+      /* добавляем лист */
+      /* --------------------------------------------------------------------------- */
+
+      var brElement = document.createElement('br');
+      newDivOrders.appendChild(brElement);
+   });
+}
+
+function addLiElements(ulElement, order) {
+   var liElementDateOrder = document.createElement('li');
+   liElementDateOrder.classList.add('list-group-item');
+   liElementDateOrder.textContent = 'Дата заказа: ' + order.date;
+   ulElement.appendChild(liElementDateOrder);
+
+   var liElementRestaurantName = document.createElement('li');
+   liElementRestaurantName.classList.add('list-group-item');
+   liElementRestaurantName.textContent = 'Ресторан: ' + order.nameRestaurant;
+   ulElement.appendChild(liElementRestaurantName);
+
+   var liElementPrice = document.createElement('li');
+   liElementPrice.classList.add('list-group-item');
+   liElementPrice.textContent = 'Сумма заказа: ' + order.sum + '$';
+   ulElement.appendChild(liElementPrice);
+
+   var liElementBlank = document.createElement('li');
+   liElementBlank.classList.add('list-group-item');
+   ulElement.appendChild(liElementBlank);
+}
+
+function textButton(period) {
+   if (period === 'week') return 'За последнюю неделю';
+   else if (period === 'month') return 'За последний месяц';
+   else if (period === 'year') return 'За последний год';
+   else if (period === 'all') return 'За все время';
+}
+
+function addButtonList(subGeneralListMenu, productsDiv) {
+   var collapseId = 'collapseOne' + buttonIdCounter;
+   buttonIdCounter++;
+
+   var nameButton = document.createElement('h2');
+   nameButton.classList.add('accordion-header');
+
+   var button = document.createElement('button');
+   button.classList.add('accordion-button');
+   button.setAttribute('type', 'button');
+   button.setAttribute('data-bs-toggle', 'collapse');
+   button.setAttribute('data-bs-target', '#' + collapseId);
+   button.setAttribute('aria-expanded', 'false');
+   button.setAttribute('aria-controls', collapseId);
+   button.textContent = 'Лист';
+
+   nameButton.appendChild(button);
+
+   subGeneralListMenu.appendChild(nameButton);
+
+   var bsCollapse = new bootstrap.Collapse(button, {
+      target: '#' + collapseId
+   });
+   button.addEventListener('click', function () {
+      if (productsDiv.classList.contains('show')) {
+         productsDiv.classList.remove('show'); // Если класс 'show' уже есть, удаляем его
+      } else {
+         productsDiv.classList.add('show'); // Если класс 'show' отсутствует, добавляем его
+      }
+   });
+}
+
+function addUlElementForDivMenu(divSpaceForMenu, menu) {
+   var ulElementMenu = document.createElement('ul');
+   ulElementMenu.classList.add('list-group', 'list-group-flush');
+   addLiElementsMenu(ulElementMenu, menu);
+
+   divSpaceForMenu.appendChild(ulElementMenu);
+}
+function addLiElementsMenu(ulElementMenu, menu) {
+   var liElementName = document.createElement('li');
+   liElementName.classList.add('list-group-item');
+   liElementName.textContent = 'Имя продукта: ' + menu.menu.name;
+   ulElementMenu.appendChild(liElementName);
+
+   var liElementPrice = document.createElement('li');
+   liElementPrice.classList.add('list-group-item');
+   liElementPrice.textContent = 'Цена: ' + menu.menu.price + '$';
+   ulElementMenu.appendChild(liElementPrice);
+
+   var liElementCount = document.createElement('li');
+   liElementCount.classList.add('list-group-item');
+   liElementCount.textContent = 'Кол-во: ' + menu.count;
+   ulElementMenu.appendChild(liElementCount);
+
+   var liElementBlank = document.createElement('li');
+   liElementBlank.classList.add('list-group-item');
+   ulElementMenu.appendChild(liElementBlank);
+}
 
 /* получение заказов */
 /* -------------------------------------------------------------------------------------- */

@@ -160,14 +160,14 @@
 
 <div id="modal-my-orders" class="modal-orders">
     <div class="button-show-orders">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button id="orders-button" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             За последнюю неделю
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">За последнюю неделю</a></li>
-            <li><a class="dropdown-item" href="#">За последний месяц</a></li>
-            <li><a class="dropdown-item" href="#">За последний год</a></li>
-            <li><a class="dropdown-item" href="#">За все время</a></li>
+            <li><a class="dropdown-item" href="#" onclick="getProducts('week')">За последнюю неделю</a></li>
+            <li><a class="dropdown-item" href="#" onclick="getProducts('month')">За последний месяц</a></li>
+            <li><a class="dropdown-item" href="#" onclick="getProducts('year')">За последний год</a></li>
+            <li><a class="dropdown-item" href="#" onclick="getProducts('all')">За все время</a></li>
         </ul>
     </div>
 
@@ -175,9 +175,9 @@
         <p style="font-size: 24px; font-style: italic;">У вас пока нет заказов</p>
     </div>
 
-    <div class="list-orders" th:if="${not #lists.isEmpty(listOrders)}">
+    <div id="main-div-orders" class="list-orders" th:if="${not #lists.isEmpty(listOrders)}">
         <p style="font-size: 24px; font-style: italic;">Заказы</p>
-        <div th:each="order : ${listOrders}">
+        <div id="div-orders" th:each="order : ${listOrders}">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item" th:text="'Дата заказа: ' + ${order.getDate()}"></li>
                 <li class="list-group-item" th:text="'Ресторан: ' + ${order.getNameRestaurant()}"></li>

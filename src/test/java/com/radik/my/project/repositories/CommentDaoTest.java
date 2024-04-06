@@ -1,11 +1,14 @@
 package com.radik.my.project.repositories;
 
 import com.radik.my.project.entity.Comment;
+import com.radik.my.project.entity.User;
+import com.radik.my.project.entity.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -52,7 +55,6 @@ public class CommentDaoTest {
                 () -> assertEquals(theBiggestCommentsId.get(4), comments.get(4).getId())
         );
     }
-
 
 
 }

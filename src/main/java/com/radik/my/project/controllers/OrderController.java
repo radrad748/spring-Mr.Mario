@@ -3,21 +3,20 @@ package com.radik.my.project.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.radik.my.project.entity.*;
+import com.radik.my.project.entity.enums.PeriodOrders;
 import com.radik.my.project.services.OrderService;
 import com.radik.my.project.services.RestaurantService;
 import com.radik.my.project.services.UserService;
 import com.radik.my.project.utils.Mappers.MenuMapper;
 import com.radik.my.project.utils.Mappers.UserMapper;
+import com.radik.my.project.utils.dto.OrderDto;
 import com.radik.my.project.utils.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -99,7 +98,19 @@ public class OrderController {
         return "success-order";
     }
 
+    @GetMapping("/user/orders")
+    @ResponseBody
+    ResponseEntity<List<OrderDto>> getOrders(@RequestParam String period, HttpSession session) {
+        if (!validPeriod(period)) return ResponseEntity.badRequest().build();
 
+        PeriodOrders periodOrders = getPeriod(period);
+        UserDto userDto = (UserDto) session.getAttribute("user");
+
+        List<OrderDto> orders = orderService.getOrdersDto(userService.get(userDto.getId()), periodOrders);
+        return ResponseEntity.ok(orders);
+    }
+
+/* ----------------------------------------------------------------------------------------------- */
     private HttpSession dtoInSession(String email, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         UserDto dto = (UserDto) session.getAttribute("user");
@@ -149,6 +160,28 @@ public class OrderController {
         }
         return result;
     }
+
+    private PeriodOrders getPeriod(String period) {
+        for (PeriodOrders p : PeriodOrders.values()) {
+            if (p.getValue().equals(period)) return p;
+        }
+        return null;
+    }
+
+    private boolean validPeriod(String period) {
+        if (period.trim().isEmpty()) return false;
+
+        Set<String> setPeriod = new HashSet<>();
+        setPeriod.add("week");
+        setPeriod.add("month");
+        setPeriod.add("year");
+        setPeriod.add("all");
+
+        if(!setPeriod.contains(period)) return false;
+
+        return true;
+    }
+
 
 
 }
