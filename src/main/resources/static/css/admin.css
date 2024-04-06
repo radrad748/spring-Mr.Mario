@@ -1,0 +1,33 @@
+table {
+    margin-left: 35%;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-collapse: collapse;
+    border-spacing: 5px;
+    background: #888886;
+    color: #0a0a0a;
+    border: 16px solid #888886;
+}
+th {
+    font-size: 18px;
+    padding: 10px;
+}
+td {
+    background: #13c0e8;
+    padding: 10px;
+}
+table.rounded-corner {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.div-basis {
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

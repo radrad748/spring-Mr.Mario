@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -80,7 +81,7 @@ public class User implements UserDetails {
         for(Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.name()));
         }
-        return authorities; */
+        return authorities;*/
         return roles;
     }
 

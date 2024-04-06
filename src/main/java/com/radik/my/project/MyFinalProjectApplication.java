@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableWebSecurity
+//@EnableWebSecurity
 @EnableTransactionManagement
 public class MyFinalProjectApplication {
 

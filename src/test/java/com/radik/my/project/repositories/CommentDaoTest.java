@@ -27,6 +27,8 @@ public class CommentDaoTest {
     private CommentDao commentDao;
     @PersistenceContext
     private EntityManager entityManager;
+    //@Autowired
+    //private UserRepository userRepository;
 
     @Test
     void getCommentDesc_returnSizeComments() {
@@ -55,6 +57,14 @@ public class CommentDaoTest {
                 () -> assertEquals(theBiggestCommentsId.get(4), comments.get(4).getId())
         );
     }
+
+    /*@Test
+    void a() {
+        User user = userRepository.findById(4L).get();
+        for (Role r : user.getRoles()) {
+            System.out.println(r.toString());
+        }
+    }*/
 
 
 }

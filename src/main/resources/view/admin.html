@@ -2,12 +2,14 @@
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Login</title>
 
     <link rel="stylesheet" href="/static/css/comm.css">
-    <link rel="stylesheet" href="/static/css/registration.css">
-    <link rel="stylesheet" href="/static/css/style-registration.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark my-nav"> <button class="navbar-toggler" type="button" data-target="#navigation"> <span class="navbar-toggler-icon"></span> </button>
@@ -30,43 +32,49 @@
     </ul>
 </nav>
 <a href="/profile?period=week" class="profile-href" th:if="${#authorization.expression('isAuthenticated()')}"><img src="/static/profile-icon.png" alt="profile" class="profile-img"></a>
+
+<!-- ----------------------------------------------------------------------------------------------------------------- -->
+
 <div class="div-front">
-    <div class="container">
-        <header>
-            <h1>
-                <a href="#">
-                    <img src="/static/mario.jpg" alt="Mr.Mario" class="img-mario">
-                </a>
-            </h1>
-        </header>
-        <h1 class="text-center title">Register</h1>
-        <form id="form-register" class="registration-form" action="#" autocomplete="off">
-            <label class="col-one-half">
-                <span class="label-text">First Name</span>
-                <input type="text" name="firstName">
-            </label>
-            <label class="col-one-half">
-                <span class="label-text">Last Name</span>
-                <input type="text" name="lastName">
-            </label>
-            <label>
-                <span class="label-text">Email</span>
-                <input type="text" name="email">
-            </label>
-            <label class="password">
-                <span class="label-text">Password</span>
-                <button class="toggle-visibility" title="toggle password visibility" tabindex="-1">
-                    <span class="glyphicon glyphicon-eye-close"></span>
-                </button>
-                <input type="password" name="password">
-            </label>
-            <input id="csrf-id" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <div class="text-center">
-                <button class="submit" name="register">Sign Me Up</button>
-            </div>
-        </form>
+    <div class="div-basis">
+        <select style="margin-left: 35%" id="pageSizeSelect" onchange="window.location.href=this.value;">
+            <option th:each="size : ${pageSizeOptions}"
+                    th:value="@{${'/admin?page=' + currentPage + '&size=' + size}}"
+                    th:text="${size}"
+                    th:selected="${size == pageSize}"></option>
+        </select>
+        <table class="rounded-corner">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Count</th>
+                <th>Roles</th>
+                <th>Is active</th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.count}"></td>
+                <td th:text="${user.rolesLine}"></td>
+                <td>
+                    <div th:if="${user.active}">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="blockUser([[${user.id}]])">Block</button>
+                    </div>
+                    <div th:unless="${user.active}">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="unblockUser([[${user.id}]])">Unblock</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
+
+<!-- ----------------------------------------------------------------------------------------------------------------- -->
+
 <div id="myModal" class="modal">
     <div id="wrapper">
         <form id="sign_in" method="POST" action="/login" autocomplete="off">
@@ -78,7 +86,6 @@
     </div>
 </div>
 
-<script src="/js/login-register.js"></script>
 <script src="/js/common.js"></script>
 </body>
 </html>

@@ -3,12 +3,17 @@ package com.radik.my.project.services;
 import com.radik.my.project.entity.User;
 import com.radik.my.project.repositories.CodeAnswer;
 import com.radik.my.project.repositories.UserRepository;
+import com.radik.my.project.utils.Mappers.UserMapper;
+import com.radik.my.project.utils.dto.UserDto;
 import com.radik.my.project.utils.exceptions.NotCorrectUserDetailsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -121,6 +126,15 @@ public class UserService {
         user.setPassword(encoder.encode(newPassword));
         userRepository.save(user);
         return CodeAnswer.OK;
+    }
+
+    public Long getCount() {
+        return userRepository.count();
+    }
+
+    public List<UserDto> findAll(int page, int size) {
+        List<User> pageList = userRepository.findAll(PageRequest.of(page, size)).getContent();
+        return UserMapper.toListUserDto(pageList);
     }
 
 }
