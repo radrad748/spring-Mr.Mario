@@ -37,7 +37,7 @@
 
 <div class="div-front">
     <div class="div-basis">
-        <select style="margin-left: 35%" id="pageSizeSelect" onchange="window.location.href=this.value;">
+        <select style="margin-left: 25%" id="pageSizeSelect" onchange="window.location.href=this.value;">
             <option th:each="size : ${pageSizeOptions}"
                     th:value="@{${'/admin?page=' + currentPage + '&size=' + size}}"
                     th:text="${size}"
@@ -62,16 +62,55 @@
                 <td th:text="${user.rolesLine}"></td>
                 <td>
                     <div th:if="${user.active}">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="blockUser([[${user.id}]])">Block</button>
+                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="'blockAndUnblockUser(\'' + ${user.id} + '\', \'' + ${currentPage} + '\', \'' + ${pageSize} + '\', \'' + 'block' + '\')'">Block</button>
                     </div>
                     <div th:unless="${user.active}">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="unblockUser([[${user.id}]])">Unblock</button>
+                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="'blockAndUnblockUser(\'' + ${user.id} + '\', \'' + ${currentPage} + '\', \'' + ${pageSize} + '\', \'' + 'unblock' + '\')'">Unblock</button>
                     </div>
+                </td>
+                <td>
+                    <select th:id="'select-add-roles' + ${user.id}" class="select-roles">
+                        <option th:each="role : ${rolesOption}"
+                                th:value="${role}"
+                                th:text="${role}">
+                        </option>
+                    </select>
+                    <a th:id="'button-send-roles' + ${user.id}" style="display: none" th:onclick=""><img src="/static/ok.png" width="20" height="20" style="cursor: pointer;"></a>
+                    <button th:id="'button-add-roles' + ${user.id}" type="button" class="btn btn-secondary btn-sm" th:onclick="'showSelectAddRoles(\'' + ${user.id} + '\')'">Add role</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="removeRole([[${user.id}]])">Delete role</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-secondary btn-sm" th:onclick="'showButtonDelete(\'' + ${user.id} + '\')'"><img src="/static/delete.png" width="20" height="20"></button>
                 </td>
             </tr>
         </table>
+        <nav aria-label="Page navigation example" style="margin-left: 26%">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{${'/admin?page=' + (currentPage - 1) + '&size=' + pageSize}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a class="page-link" th:href="@{${'/admin?page=' + pageNumber + '&size=' + pageSize}}" th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" th:href="@{${'/admin?page=' + (currentPage + 1) + '&size=' + pageSize}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
+
+<div id="modal-delete" class="modal-delete">
+    <button type="button" class="btn btn-secondary btn-sm" th:onclick="'deleteUser(\'' + ${currentPage} + '\', \'' + ${pageSize} + '\')'">Yes</button>
+    <button type="button" class="btn btn-secondary btn-sm" th:onclick="'deleteModalDelete()'">No</button>
+</div>
+<div id="overlay"></div>
 
 <!-- ----------------------------------------------------------------------------------------------------------------- -->
 
@@ -87,5 +126,6 @@
 </div>
 
 <script src="/js/common.js"></script>
+<script src="/js/admin.js"></script>
 </body>
 </html>

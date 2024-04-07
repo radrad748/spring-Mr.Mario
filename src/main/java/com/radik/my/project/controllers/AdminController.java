@@ -1,16 +1,18 @@
 package com.radik.my.project.controllers;
 
+import com.radik.my.project.entity.enums.Role;
 import com.radik.my.project.services.UserService;
 import com.radik.my.project.utils.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,14 +35,41 @@ public class AdminController {
         List<UserDto> users = userService.findAll(page, size);
         int[] pageSizeOptions = createPageSizeOptions(3, 5, 10);
 
+        List<String> rolesOption = getListRoles(Role.values());
+
         model.addAttribute("users", users);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         model.addAttribute("pageSizeOptions", pageSizeOptions);
+        model.addAttribute("rolesOption", rolesOption);
 
         return "admin";
     }
+
+    @DeleteMapping("/delete/user/{id}")
+    ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        if (Objects.isNull(id)) return ResponseEntity.notFound().build();
+
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{bOrU}/user/{id}")
+    ResponseEntity<Void> blockUser(@PathVariable String bOrU, @PathVariable Long id) {
+        if (Objects.isNull(id) || Objects.isNull(bOrU) || bOrU.trim().isEmpty()) return ResponseEntity.notFound().build();
+        if (!userService.ifExistId(id)) return ResponseEntity.badRequest().build();
+
+        if (bOrU.equals("block")) {
+            userService.block(id);
+            return ResponseEntity.ok().build();
+        } else if (bOrU.equals("unblock")) {
+            userService.unblock(id);
+            return ResponseEntity.ok().build();
+        } else return ResponseEntity.notFound().build();
+    }
+
+
 
     /* ----------------------------------------------------------------------------------- */
 
@@ -52,6 +81,17 @@ public class AdminController {
         }
 
         return pageSizeOptions;
+    }
+
+    private List<String> getListRoles(Role[] roles) {
+        List<String> result = new ArrayList<>();
+
+        for (Role role : roles) {
+            if (role == Role.USER) break;
+            result.add(role.toString());
+        }
+
+        return result;
     }
 
 }

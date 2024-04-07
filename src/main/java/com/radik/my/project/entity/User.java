@@ -110,6 +110,13 @@ public class User implements UserDetails {
         return active;
     }
 
+    public void block() {
+        active = false;
+    }
+    public void unblock() {
+        active = true;
+    }
+
     public static UserBuilder builder() {
         return new UserBuilder();
     }

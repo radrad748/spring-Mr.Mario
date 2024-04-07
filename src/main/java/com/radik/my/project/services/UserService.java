@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +36,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (id == null) throw new NotCorrectUserDetailsException("id не может быть null");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("пользователя с таким id не существует");
@@ -42,6 +44,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public User create(User user) {
         if (user == null) throw new NotCorrectUserDetailsException("user не может быть null");
         if (ifExistEmail(user.getEmail())) return null;
@@ -52,6 +55,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User update(User user) {
         if (user == null) throw new NotCorrectUserDetailsException("при обновление user не может быть null");
 
@@ -60,6 +64,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User addCount(Long id, int count) {
         if (count < 0 || id == null) throw new RuntimeException("некорректные данные");
         if (!ifExistId(id)) throw new NotCorrectUserDetailsException("user с таким id не существует");
@@ -77,6 +82,7 @@ public class UserService {
         } else throw new NotCorrectUserDetailsException("user с таким email не существует");
     }
 
+    @Transactional
     public void modifyName(Long id, String name) {
         if (id == null || Objects.isNull(name) || name.trim().isEmpty()) throw new RuntimeException("некорректные данные");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("user с таким id не существует");
@@ -85,6 +91,7 @@ public class UserService {
         user.setFirstName(name);
         userRepository.save(user);
     }
+    @Transactional
     public void modifySurname(Long id, String surname) {
         if (id == null || Objects.isNull(surname) || surname.trim().isEmpty()) throw new RuntimeException("некорректные данные");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("user с таким id не существует");
@@ -94,6 +101,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void modifyEmail(Long id, String email) {
         if (id == null || Objects.isNull(email) || email.trim().isEmpty()) throw new RuntimeException("некорректные данные");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("user с таким id не существует");
@@ -112,6 +120,7 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
+    @Transactional
     public CodeAnswer modifyPassword(Long id, String password, String newPassword) {
         if (id == null || id < 0 || Objects.isNull(password) || password.trim().isEmpty() ||
                 Objects.isNull(newPassword) || newPassword.trim().isEmpty())
@@ -137,4 +146,20 @@ public class UserService {
         return UserMapper.toListUserDto(pageList);
     }
 
+    public void block(Long id) {
+        if (Objects.isNull(id)) throw new NotCorrectUserDetailsException("id не может быть null");
+        if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("Пользователя с таким id не существует");
+
+        User user = userRepository.findById(id).get();
+        user.block();
+        userRepository.save(user);
+    }
+    public void unblock(Long id) {
+        if (Objects.isNull(id)) throw new NotCorrectUserDetailsException("id не может быть null");
+        if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("Пользователя с таким id не существует");
+
+        User user = userRepository.findById(id).get();
+        user.unblock();
+        userRepository.save(user);
+    }
 }
