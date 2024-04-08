@@ -73,8 +73,45 @@ function showSelectAddRoles(id) {
     var buttonAccept = document.getElementById('button-send-roles' + id);
     buttonAccept.style.display = 'block';
 }
+function showSelectDeleteRoles(id) {
+    var buttonDelete = document.getElementById('button-delete-roles' + id);
+    buttonDelete.style.display = 'none';
 
+    var selectDelete = document.getElementById('select-delete-roles' + id);
+    selectDelete.style.display = 'block';
+    var buttonAccept = document.getElementById('button-send1-roles' + id);
+    buttonAccept.style.display = 'block';
+}
 
+function changeUserRoles(id, currentPage, pageSize, command) {
+    var urlAddRole = '/admin/' + command + '/role/user/' + id;
+    var url = '/admin/?page=' + currentPage + '&size=' + pageSize;
+    var role = document.getElementById('select-add-roles' + id).value;
+    var csrfToken = document.getElementById('csrf-id-modal').value;
 
-/* add roles user */
+    var data = {
+        role: role
+    };
+
+    fetch(urlAddRole,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = url;
+            } else  {
+                console.log('Ошибка: ' + response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+/* add/delete roles user */
 /* ------------------------------------------------------------------------------------------------ */

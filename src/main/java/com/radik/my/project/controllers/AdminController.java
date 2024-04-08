@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -56,7 +58,7 @@ public class AdminController {
     }
 
     @PostMapping("/{bOrU}/user/{id}")
-    ResponseEntity<Void> blockUser(@PathVariable String bOrU, @PathVariable Long id) {
+    ResponseEntity<Void> blockUnblockUser(@PathVariable String bOrU, @PathVariable Long id) {
         if (Objects.isNull(id) || Objects.isNull(bOrU) || bOrU.trim().isEmpty()) return ResponseEntity.notFound().build();
         if (!userService.ifExistId(id)) return ResponseEntity.badRequest().build();
 
@@ -69,7 +71,24 @@ public class AdminController {
         } else return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/{command}/role/user/{id}")
+    ResponseEntity<Void> changeUserRoles(@PathVariable String command, @PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        if (Objects.isNull(command) || command.trim().isEmpty() || Objects.isNull(id)) return ResponseEntity.notFound().build();
+        if (!userService.ifExistId(id)) return ResponseEntity.badRequest().build();
 
+        Role role = getRole(requestBody);
+        if (role == null) return ResponseEntity.badRequest().build();
+
+        if (command.equals("add")) {
+            userService.addRole(id, role);
+            return ResponseEntity.ok().build();
+        }
+        else if (command.equals("delete")){
+            userService.deleteRole(id, role);
+            return ResponseEntity.ok().build();
+        }
+        else return ResponseEntity.notFound().build();
+    }
 
     /* ----------------------------------------------------------------------------------- */
 
@@ -92,6 +111,17 @@ public class AdminController {
         }
 
         return result;
+    }
+    private Role getRole(Map<String, String> requestBody) {
+        String role = requestBody.get("role");
+        if (Objects.isNull(role) || role.trim().isEmpty()) return null;
+
+        for (Role r : Role.values()) {
+            if (r.toString().equals(role)) {
+                return r;
+            }
+        }
+        return null;
     }
 
 }

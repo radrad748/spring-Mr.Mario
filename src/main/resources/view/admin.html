@@ -75,11 +75,18 @@
                                 th:text="${role}">
                         </option>
                     </select>
-                    <a th:id="'button-send-roles' + ${user.id}" style="display: none" th:onclick=""><img src="/static/ok.png" width="20" height="20" style="cursor: pointer;"></a>
+                    <a th:id="'button-send-roles' + ${user.id}" style="display: none" th:onclick="'changeUserRoles(\'' + ${user.id} + '\', \'' + ${currentPage} + '\', \'' + ${pageSize} + '\', \'' + 'add' + '\')'"><img src="/static/ok.png" width="20" height="20" style="cursor: pointer;"></a>
                     <button th:id="'button-add-roles' + ${user.id}" type="button" class="btn btn-secondary btn-sm" th:onclick="'showSelectAddRoles(\'' + ${user.id} + '\')'">Add role</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="removeRole([[${user.id}]])">Delete role</button>
+                    <select th:id="'select-delete-roles' + ${user.id}" class="select-roles">
+                        <option th:each="role : ${rolesOption}"
+                                th:value="${role}"
+                                th:text="${role}">
+                        </option>
+                    </select>
+                    <a th:id="'button-send1-roles' + ${user.id}" style="display: none" th:onclick="'changeUserRoles(\'' + ${user.id} + '\', \'' + ${currentPage} + '\', \'' + ${pageSize} + '\', \'' + 'delete' + '\')'"><img src="/static/ok.png" width="20" height="20" style="cursor: pointer;"></a>
+                    <button th:id="'button-delete-roles' + ${user.id}" type="button" class="btn btn-secondary btn-sm" th:onclick="'showSelectDeleteRoles(\'' + ${user.id} + '\')'">Delete role</button>
                 </td>
                 <td>
                     <button type="button" class="btn btn-secondary btn-sm" th:onclick="'showButtonDelete(\'' + ${user.id} + '\')'"><img src="/static/delete.png" width="20" height="20"></button>

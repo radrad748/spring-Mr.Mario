@@ -1,6 +1,7 @@
 package com.radik.my.project.services;
 
 import com.radik.my.project.entity.User;
+import com.radik.my.project.entity.enums.Role;
 import com.radik.my.project.repositories.CodeAnswer;
 import com.radik.my.project.repositories.UserRepository;
 import com.radik.my.project.utils.Mappers.UserMapper;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -145,7 +147,7 @@ public class UserService {
         List<User> pageList = userRepository.findAll(PageRequest.of(page, size)).getContent();
         return UserMapper.toListUserDto(pageList);
     }
-
+    @Transactional
     public void block(Long id) {
         if (Objects.isNull(id)) throw new NotCorrectUserDetailsException("id не может быть null");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("Пользователя с таким id не существует");
@@ -154,6 +156,7 @@ public class UserService {
         user.block();
         userRepository.save(user);
     }
+    @Transactional
     public void unblock(Long id) {
         if (Objects.isNull(id)) throw new NotCorrectUserDetailsException("id не может быть null");
         if (!userRepository.existsById(id)) throw new NotCorrectUserDetailsException("Пользователя с таким id не существует");
@@ -161,5 +164,17 @@ public class UserService {
         User user = userRepository.findById(id).get();
         user.unblock();
         userRepository.save(user);
+    }
+    @Transactional
+    public void addRole(Long id, Role role) {
+        User user = userRepository.findById(id).get();
+        boolean addRole = user.addRole(role);
+        if (addRole) userRepository.save(user);
+    }
+    @Transactional
+    public void deleteRole(Long id, Role role) {
+        User user = userRepository.findById(id).get();
+        boolean deleteRole = user.deleteRole(role);
+        if (deleteRole) userRepository.save(user);
     }
 }

@@ -116,6 +116,13 @@ public class User implements UserDetails {
     public void unblock() {
         active = true;
     }
+    public boolean addRole(Role role) {
+        return roles.add(role);
+    }
+    public boolean deleteRole(Role role) {
+        if (role == Role.USER) return false;
+        return roles.remove(role);
+    }
 
     public static UserBuilder builder() {
         return new UserBuilder();
