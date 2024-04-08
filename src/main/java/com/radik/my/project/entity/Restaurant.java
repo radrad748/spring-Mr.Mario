@@ -33,6 +33,9 @@ public class Restaurant {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_id")
     private List<Order> orders;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
+    private List<Share> shares;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime dateTime;
