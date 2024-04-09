@@ -18,6 +18,17 @@ import java.util.List;
 public class Share {
     public Share() {}
 
+    public Share(Long id, String description, Restaurant restaurant, ShareType type, List<CountMenuShare> countMList, Integer discount, LocalDateTime term, LocalDateTime dateTime) {
+        this.id = id;
+        this.description = description;
+        this.restaurant = restaurant;
+        this.type = type;
+        this.countMList = countMList;
+        this.discount = discount;
+        this.term = term;
+        this.dateTime = dateTime;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,11 +39,9 @@ public class Share {
     private Restaurant restaurant;
     @Enumerated(value = EnumType.ORDINAL)
     private ShareType type;
-    @ManyToMany
-    @JoinTable(name = "share_menu",
-    joinColumns = @JoinColumn(name = "share_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"))
-    List<Menu> menuList;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "share_id")
+    List<CountMenuShare> countMList;
     @Column(nullable = false, columnDefinition = "TINYINT UNSIGNED")
     private Integer discount;
     private LocalDateTime term;

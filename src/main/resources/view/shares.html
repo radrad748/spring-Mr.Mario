@@ -37,6 +37,24 @@
 <div class="div-back">
     <div class="container-common div-padding">
         <h1 class="title">Акции!</h1>
+        <br>
+        <div th:if="${not #lists.isEmpty(shares)}">
+            <div th:each="share : ${shares}">
+                <p class="res-title" th:text="'Ресторан ' + ${share.resTitle} + ':'"></p>
+                <p style="margin-left: 15%" th:text="${share.description}"></p>
+                <p style="font-size: 14px; margin-left: 15%" th:text="'Действительно до ' + ${share.term}"></p>
+                <div th:each="menu : ${share.getMenuList()}">
+                    <p style="margin-left: 15%" th:text="${menu.menu.name} + ' - цена: ' + ${menu.menu.price} + '$ , ' + ${menu.count} + 'шт.'"></p>
+                </div>
+                <span style="font-size: 16px; font-style: italic" th:text="'Заказать всего за ' + ${share.allPrice} + '$'">
+                </span>
+                <button th:id="'button-order-share' + ${share.id}" th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-info btn-sm" th:onclick="'orderShare(' + ${share.id} + ')'">Заказать</button>
+                <hr>
+                <div th:id="'modal-share' + ${share.id}" class="modal-share">
+
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
@@ -55,5 +73,6 @@
 </div>
 
 <script src="/js/common.js"></script>
+<script src="/js/share.js"></script>
 </body>
 </html>

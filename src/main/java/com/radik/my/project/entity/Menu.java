@@ -32,11 +32,6 @@ public class Menu {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id")
     private List<CountMenuOrder> countMn;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "share_menu",
-            joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "share_id", referencedColumnName = "id"))
-    List<Share> shareList;
     @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime dateTime;
