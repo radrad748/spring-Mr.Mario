@@ -67,8 +67,6 @@ public class CommentDaoTest {
 
     /* --------------------------------------------------------------------------------------------------- */
 
-    @Autowired
-    private ShareService shareService;
 
     /*@Test
     void a() {
