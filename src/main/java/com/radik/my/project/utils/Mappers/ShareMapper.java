@@ -12,7 +12,9 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShareMapper {
 
@@ -27,7 +29,10 @@ public class ShareMapper {
         }
 
         String term = termToString(share.getTerm());
-        BigDecimal allPrice = allPriceShare(share, menuList);
+        Map<String, BigDecimal> prices = priceShare(share, menuList);
+
+        BigDecimal allPrice = prices.get("allPrice");
+        BigDecimal priceWD = prices.get("priceWD");
 
         return ShareDto.builder()
                 .id(share.getId())
@@ -37,6 +42,7 @@ public class ShareMapper {
                 .menuList(menuList)
                 .discount(share.getDiscount())
                 .allPrice(allPrice)
+                .priceWithoutDiscount(priceWD)
                 .term(term).build();
     }
 
@@ -55,7 +61,8 @@ public class ShareMapper {
         return term.format(formatter);
     }
 
-    private static BigDecimal allPriceShare(Share share, List<CountMenuShareDto> menuList) {
+    private static Map<String, BigDecimal> priceShare(Share share, List<CountMenuShareDto> menuList) {
+        Map<String, BigDecimal> map = new HashMap<>();
         BigDecimal perCent = new BigDecimal(share.getDiscount());
 
         BigDecimal init = BigDecimal.ZERO;
@@ -63,12 +70,14 @@ public class ShareMapper {
             init = init.add(menu.getMenu().getPrice());
             init = init.multiply(new BigDecimal(menu.getCount()));
         }
+        map.put("priceWD", init.setScale(2, RoundingMode.HALF_UP));
 
         BigDecimal countPerCent = init.divide(new BigDecimal("100"));
         countPerCent = countPerCent.multiply(perCent);
         init = init.subtract(countPerCent);
 
-        return init.setScale(2, RoundingMode.HALF_UP);
+        map.put("allPrice", init.setScale(2, RoundingMode.HALF_UP));
+        return map;
     }
 
 }

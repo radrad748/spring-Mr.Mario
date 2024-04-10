@@ -22,5 +22,6 @@ public class ShareDto {
     private Integer discount;
     private String term;
     private BigDecimal allPrice;
+    private BigDecimal priceWithoutDiscount;
 
 }

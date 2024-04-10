@@ -51,15 +51,31 @@
                 <button th:id="'button-order-share' + ${share.id}" th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn btn-info btn-sm" th:onclick="'orderShare(' + ${share.id} + ')'">Заказать</button>
                 <hr>
                 <div th:id="'modal-share' + ${share.id}" class="modal-share">
+                    <p th:text="'Заказать предложение по спецальной цене'"></p>
+                    <p th:text="'Скидка ' + ${share.discount} + '%'"></p>
+                    <p>
+                        Цена:
+                        <span style="text-decoration: line-through;" th:text="${share.priceWithoutDiscount} + '$ '"></span>
+                        <span th:text="${share.allPrice} + '$'"></span>
+                    </p>
+                    <form th:id="'order-button' + ${share.id}" style="margin-left: 2px">
+                        <label th:for="'client-address' + ${share.id}">Адрес:</label><br>
+                        <input type="text" th:id="'client-address' + ${share.id}" name="address" class="input-address-phone address-input" placeholder="Enter your address.."><br>
+                        <label th:for="'client-phone' + ${share.id}">Телефон:</label><br>
+                        <input type="number" th:id="'client-phone' + ${share.id}" name="phone" class="input-address-phone phone-input" placeholder="Enter your phone number.."><br>
+                        <br>
+                        <button th:if="${user != null}" type="button" class="btn btn-info btn-sm" th:onclick="'makeShareOrder(\'' + ${share.allPrice} + '\', \'' + ${user.count} + '\', \'' + ${share.id} + '\')'">Заказать</button>
+                    </form>
+                    <br>
+                    <p th:if="${user != null}" class="p-user-count" th:text="'Мой текущий счет: ' + ${user.count} + '$'"></p>
+                 </div>
+             </div>
+         </div>
 
-                </div>
-            </div>
-        </div>
+     </div>
+ </div>
 
-    </div>
-</div>
-
-<!-- ----------------------------------------------------------------------------------------------- -->
+ <!-- ----------------------------------------------------------------------------------------------- -->
 
 <div id="myModal" class="modal">
     <div id="wrapper">

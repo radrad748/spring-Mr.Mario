@@ -33,4 +33,11 @@ public class ShareDao {
         return query.getResultList();
     }
 
+    public Share get(Long id) {
+        TypedQuery<Share> query = entityManager.createQuery("select distinct s from Share s join fetch s.countMList where s.id = :id", Share.class);
+        query.setParameter("id", id);
+
+        return query.getResultList().get(0);
+    }
+
 }

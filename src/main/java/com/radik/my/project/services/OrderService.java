@@ -3,6 +3,7 @@ package com.radik.my.project.services;
 import com.radik.my.project.entity.*;
 import com.radik.my.project.entity.enums.PeriodOrders;
 import com.radik.my.project.repositories.OrderDao;
+import com.radik.my.project.repositories.ShareDao;
 import com.radik.my.project.utils.Mappers.OrderMapper;
 import com.radik.my.project.utils.dto.OrderDto;
 import com.radik.my.project.utils.exceptions.NotCorrectDataServices;
@@ -23,6 +24,7 @@ public class OrderService {
 
     private final OrderDao orderDao;
     private final UserService userService;
+    private final ShareDao shareDao;
 
     @Transactional
     public void saveOrder(Restaurant res, User user, BigDecimal sum, String address, String phone, Map<String, String> menu) {
@@ -43,7 +45,6 @@ public class OrderService {
         userService.update(user);
     }
 
-    @Transactional
     public List<OrderDto> getOrdersDto(User user, PeriodOrders period) {
         if (Objects.isNull(user) || Objects.isNull(period)) throw new NotCorrectUserDetailsException("Входные данные не могут быть null");
 
@@ -55,6 +56,28 @@ public class OrderService {
         if (orders.isEmpty()) return new ArrayList<>();
 
         return OrderMapper.getListOrdersDto(orders);
+    }
+
+    @Transactional
+    public void saveShareOrder(Long shareId, String userEmail, BigDecimal sum, String address, String phone) {
+        Share share = getValidShare(shareId);
+        User user = getValidUser(userEmail);
+
+        Order order = Order.builder()
+                .restaurant(share.getRestaurant())
+                .user(user)
+                .sum(sum)
+                .address(address)
+                .phone(phone)
+                .delivery(true)
+                .build();
+
+        addListCountMenuOrderToOrder(order, share);
+        orderDao.save(order);
+
+        BigDecimal newUserCount = user.getCount().subtract(sum);
+        user.setCount(newUserCount);
+        userService.update(user);
     }
 
     /* --------------------------------------------------------------------------------------------------- */
@@ -81,6 +104,20 @@ public class OrderService {
         order.setCountMo(listCmo);
     }
 
+    private void addListCountMenuOrderToOrder(Order order, Share share) {
+        List<CountMenuOrder> listCmo = new ArrayList<>();
+
+        for (CountMenuShare cms : share.getCountMList()) {
+            CountMenuOrder cmo = new CountMenuOrder();
+            cmo.setCount(cms.getCount());
+            cmo.setMenu(cms.getMenu());
+            cmo.setOrder(order);
+            listCmo.add(cmo);
+        }
+
+        order.setCountMo(listCmo);
+    }
+
 
     private LocalDateTime getStartDateForUserOrders(LocalDateTime endDate, PeriodOrders period) {
         switch (period) {
@@ -97,6 +134,17 @@ public class OrderService {
         }
     }
 
+    private Share getValidShare(Long shareId) {
+        Share share = shareDao.get(shareId);
+        if (share == null) throw new NotCorrectDataServices("Акции по такой id не существует");
 
+        return share;
+    }
+    private User getValidUser(String email) {
+        User user = userService.get(email);
+        if (user == null) throw new NotCorrectDataServices("User с таким email не существует");
+
+        return user;
+    }
 
 }
