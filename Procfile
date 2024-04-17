@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -jar target/My-Final-Project-0.0.1-SNAPSHOT.jar
